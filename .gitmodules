@@ -1,3 +1,0 @@
-[submodule "ultralytics"]
-	path = ultralytics
-	url = https://github.com/tee1g21/ultralytics.git
