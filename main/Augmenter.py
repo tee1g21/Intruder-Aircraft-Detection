@@ -223,18 +223,18 @@ def augment_image(image_path, images_aug_dir, label_path, labels_aug_dir, method
     # Determine which augmentation function to call based on the method name
     if method_name == 'flip':
         augmented_image, augmented_label = flip(image_path, label_path, **method_info['parameters'])
-    elif method_name == 'rotation':
+    elif method_name == 'rotate':
         augmented_image, augmented_label = rotate(image_path, label_path, **method_info['parameters'])
-    elif method_name == 'brightness_contrast':
+    elif method_name == 'bnc':
         augmented_image = brightness_and_contrast(image_path, **method_info['parameters'])
         augmented_label = open(label_path).read()  # No change to label for this augmentation
-    elif method_name == 'gaussian_noise':
+    elif method_name == 'gaussian':
         augmented_image = gaussian_noise(image_path, **method_info['parameters'])
         augmented_label = open(label_path).read()  # No change to label for this augmentation
-    elif method_name == 'histogram_equalization':
+    elif method_name == 'histEq':
         augmented_image = hist_eq(image_path, **method_info['parameters'])
         augmented_label = open(label_path).read()  # No change to label for this augmentation
-    elif method_name == 'white_balance':
+    elif method_name == 'whiteBal':
         augmented_image = white_balance(image_path)
         augmented_label = open(label_path).read()  # No change to label for this augmentation
     elif method_name == 'sharpen':

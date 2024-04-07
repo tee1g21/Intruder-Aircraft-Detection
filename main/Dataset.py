@@ -75,6 +75,7 @@ def create_sub_dataset(dataset_name, filtered_train_df, filtered_valid_df, class
     images_dir = Path(new_dataset_dir) / 'images'
     labels_dir = Path(new_dataset_dir) / 'labels'
 
+    print("Removing dataset if pre-existing")
     Tools.remove_if_exists(new_dataset_dir)
 
     # Create directories
