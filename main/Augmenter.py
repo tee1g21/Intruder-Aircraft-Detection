@@ -160,7 +160,7 @@ def gaussian_noise(image_path, var_limit=(10.0, 50.0)):
     return augmented_image
 
 # zoom centred about object
-def zoom(image_path, label_path, zoom_factor=1.5):
+def zoom(image_path, label_path, zoom_factor=1):
     """
     zoom factor: No zoom = 1, Full zoom (bounding box takes up entire picture) = 10
     """
@@ -205,6 +205,34 @@ def zoom(image_path, label_path, zoom_factor=1.5):
 
     return augmented_image, augmented_label
 
+# shift hue, saturation or value or HSV
+def hsv_shift(image_path, type, shift, p=1.0):
+    
+    # Load image
+    image = cv2.imread(image_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert to RGB
+
+    # Prepare shift values based on the type
+    hue_shift = shift if type == 'h' else 0
+    sat_shift = shift if type == 's' else 0
+    val_shift = shift if type == 'v' else 0
+
+    # Define the augmentation pipeline
+    transform = A.Compose([
+        A.HueSaturationValue(
+            hue_shift_limit=(hue_shift, hue_shift),  # Setting both limits to the same value for exact shift
+            sat_shift_limit=(sat_shift, sat_shift),  
+            val_shift_limit=(val_shift, val_shift),  
+            p=p
+        )
+    ])
+
+    # Apply the augmentation
+    transformed = transform(image=image)
+    augmented_image = transformed['image']
+    
+    return augmented_image
+
 # augments and saves individual image and label
 def augment_image(image_path, images_aug_dir, label_path, labels_aug_dir, method_name, method_info):
     
@@ -242,6 +270,9 @@ def augment_image(image_path, images_aug_dir, label_path, labels_aug_dir, method
         augmented_label = open(label_path).read()  # No change to label for this augmentation
     elif method_name == 'zoom':
         augmented_image, augmented_label = zoom(image_path, label_path, **method_info['parameters'])
+    elif method_name == 'hsv':
+        augmented_image = hsv_shift(image_path, **method_info['parameters'])
+        augmented_label = open(label_path).read()  # No change to label for this augmentation
     
     # Save the augmented image and label
     Tools.save_image(images_aug_dir + aug_image_filename, augmented_image)
