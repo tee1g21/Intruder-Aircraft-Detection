@@ -1,3 +1,4 @@
-/main/datasets/
+/datasets/
 /main/__pycache__
 /venv/
+/logs/

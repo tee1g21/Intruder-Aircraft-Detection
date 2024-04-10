@@ -70,7 +70,7 @@ def copy_dataframe_files_concurrently(df, img_dest_dir, label_dest_dir):
             pbar.close()
 
 # creates subsets of main dataset
-def create_sub_dataset(dataset_name, filtered_train_df, filtered_valid_df, class_names=['aircraft'], dataset_dir="datasets/"):
+def create_sub_dataset(dataset_name, filtered_train_df, filtered_valid_df, class_names=['aircraft'], dataset_dir="C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets"):
     new_dataset_dir = Path(dataset_dir) / dataset_name
     images_dir = Path(new_dataset_dir) / 'images'
     labels_dir = Path(new_dataset_dir) / 'labels'
@@ -91,9 +91,9 @@ def create_sub_dataset(dataset_name, filtered_train_df, filtered_valid_df, class
 
     # Construct the YAML content with the desired structure
     yaml_content = {
-        'path': str(f'../{new_dataset_dir}').replace('\\', '/'),  # Ensuring forward slashes
-        'train': str('images/train'),
-        'val': str('images/valid'),
+        'path': str(f'{new_dataset_dir}').replace('\\', '/'),  # Ensuring forward slashes
+        'train': str(f'{images_dir}/train').replace('\\', '/'),
+        'val': str(f'{images_dir}/valid').replace('\\', '/'),
         'names': {index: name for index, name in enumerate(class_names)}
     }  
 
