@@ -5,8 +5,8 @@ BASE_DATASET = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/dataset
 PROJECT_NAME = 'Intruder-Aircraft-Detection'
 
 # YOLO specfic
-YOLO_DATASET_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets/Yolo'
-YOLO_PROJECT_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/logs/Yolo'
+YOLO_DATASET_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets/YOLOv8'
+YOLO_PROJECT_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/logs/YOLOv8'
 YOLO_CLASS_NAMES = ['aircraft']
 
 # Custom classifier specific
