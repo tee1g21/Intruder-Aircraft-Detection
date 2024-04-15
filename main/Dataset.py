@@ -70,7 +70,7 @@ def copy_dataframe_files_concurrently(df, img_dest_dir, label_dest_dir):
             pbar.close()
 
 # creates subsets of main dataset
-def create_sub_dataset(dataset_name, filtered_train_df, filtered_valid_df, class_names=['aircraft'], dataset_dir="C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets"):
+def create_sub_dataset(dataset_name, filtered_train_df, filtered_valid_df, class_names, dataset_dir):
     new_dataset_dir = Path(dataset_dir) / dataset_name
     images_dir = Path(new_dataset_dir) / 'images'
     labels_dir = Path(new_dataset_dir) / 'labels'
