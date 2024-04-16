@@ -70,13 +70,15 @@ def copy_dataframe_files_concurrently(df, img_dest_dir, label_dest_dir):
             pbar.close()
 
 # creates subsets of main dataset
-def create_sub_dataset(dataset_name, filtered_train_df, filtered_valid_df, class_names, dataset_dir):
-    new_dataset_dir = Path(dataset_dir) / dataset_name
-    images_dir = Path(new_dataset_dir) / 'images'
-    labels_dir = Path(new_dataset_dir) / 'labels'
+def create_sub_dataset(dataset_dir, filtered_train_df, filtered_valid_df, class_names):
+    
+    dataset_dir = Path(dataset_dir)
+    dataset_name = os.path.basename(dataset_dir)
+    images_dir = Path(dataset_dir) / 'images'
+    labels_dir = Path(dataset_dir) / 'labels'
 
     print("Removing dataset if pre-existing")
-    Tools.remove_if_exists(new_dataset_dir)
+    Tools.remove_if_exists(dataset_dir)
 
     # Create directories
     for subdir in ['train', 'valid']:
@@ -91,17 +93,55 @@ def create_sub_dataset(dataset_name, filtered_train_df, filtered_valid_df, class
 
     # Construct the YAML content with the desired structure
     yaml_content = {
-        'path': str(f'{new_dataset_dir}').replace('\\', '/'),  # Ensuring forward slashes
+        'path': str(f'{dataset_dir}').replace('\\', '/'),  # Ensuring forward slashes
         'train': str(f'{images_dir}/train').replace('\\', '/'),
         'val': str(f'{images_dir}/valid').replace('\\', '/'),
         'names': {index: name for index, name in enumerate(class_names)}
     }  
 
-    yaml_path = new_dataset_dir / f"{dataset_name}.yaml"
+    yaml_path = dataset_dir / f"{dataset_name}.yaml"
     with open(yaml_path, 'w') as file:
         yaml.dump(yaml_content, file, sort_keys=False)
 
     print(f"Dataset '{dataset_name}' created at {dataset_dir}")
+
+# corrects default YOLO labels to match class names for sub-dataset
+def correct_dataset_labels(dataset_dir, train_df, val_df, class_names):
+    # Assuming dataset_dir is the root that contains 'labels/train' and 'labels/valid'
+    train_labels_path = dataset_dir + f'/labels/train'
+    val_labels_path = dataset_dir + f'/labels/valid'
+    
+    # Creating dictionaries to map filenames to new class indices based on class_names
+    train_label_mapping = {os.path.basename(row['label_path']): class_names.index(row['ac']) for _, row in train_df.iterrows()}
+    val_label_mapping = {os.path.basename(row['label_path']): class_names.index(row['ac']) for _, row in val_df.iterrows()}
+
+    # Function to update the labels in a given directory
+    def update_labels(labels_path, label_mapping, type):
+        print(f'Processing {type} labels in {os.path.basename(dataset_dir)}:')
+        for label_filename in tqdm(label_mapping, desc=f'Processing labels'):
+            new_class_index = label_mapping[label_filename]
+            label_file_path = os.path.join(labels_path, label_filename)
+            if os.path.isfile(label_file_path):
+                with open(label_file_path, 'r') as file:
+                    lines = file.readlines()
+
+                updated_lines = []
+                for line in lines:
+                    parts = line.strip().split()
+                    if parts:
+                        parts[0] = str(new_class_index)  # Update the class index
+                        updated_lines.append(' '.join(parts))
+                
+                with open(label_file_path, 'w') as file:
+                    file.writelines('\n'.join(updated_lines))
+            else:
+                print(f"File not found: {label_file_path}")
+
+    # Update labels in both train and validation directories using respective mappings
+    update_labels(train_labels_path, train_label_mapping, 'train')
+    update_labels(val_labels_path, val_label_mapping, 'valid')
+
+    print("Label correction completed.")
 
 # creates augmented dataset structure
 def create_augmented_dataset_structure(original_dataset_path):
