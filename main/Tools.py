@@ -35,8 +35,12 @@ def save_label(path, contents):
         label_file.write(contents)
 
 # Copies individual file from src to dst
-def copy_file(src, dest):
-    shutil.copy2(src, dest)
+def copy_file(src, dst):
+    shutil.copy2(src, dst)
+
+# moves individual file from src to dst   
+def move_file(src, dst):
+    shutil.move(src,dst)
 
 # Extracts class names and bboxes from all objects in label
 def load_yolo_labels(label_path):

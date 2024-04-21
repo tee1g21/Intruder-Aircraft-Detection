@@ -1,5 +1,6 @@
 /datasets/
 /main/__pycache__
-/venv/
 /logs/
 /runs/
+/yolo-venv/
+/models/

@@ -242,3 +242,44 @@ def augment_dataset(original_dataset_path, augmentation_metadata):
             future.result()  # re-raise exception that occurred
         except Exception as e:
             print(f"An error occurred: {e}")
+            
+def reorganize_dataset_for_keras(dataset_dir):
+    
+    # extract dataset name
+    dataset_name = os.path.basename(dataset_dir)
+    
+    # Load class names from the base YAML file
+    base_yaml_path = os.path.join(dataset_dir, f'{dataset_name}.yaml')
+    with open(base_yaml_path) as f:
+        base_data = yaml.load(f, Loader=yaml.FullLoader)
+    class_names = base_data['names']
+
+    # Function to create class subdirectories and move images
+    def organize_images(base_path, label_rel_path):
+        for class_id, class_name in class_names.items():
+            # Create class subdirectories within the image directories
+            class_image_dir = os.path.join(base_path, class_name)
+            os.makedirs(class_image_dir, exist_ok=True)
+
+        # Get list of label files for progress bar
+        label_dir = os.path.join(dataset_dir, label_rel_path)
+        label_files = os.listdir(label_dir)
+
+        # Wrap label_files with tqdm for a progress bar
+        for label_file in tqdm(label_files, desc=f'Moving images in {os.path.basename(base_path)}'):
+            # Read the label to get the class ID
+            with open(os.path.join(label_dir, label_file), 'r') as file:
+                class_id = int(file.readline().split()[0])
+
+            class_name = class_names[class_id]
+            image_file = label_file.replace('.txt', '.jpg')
+            source_image_path = os.path.join(base_path, image_file)
+            dest_image_path = os.path.join(base_path, class_name, image_file)
+
+            if os.path.isfile(source_image_path):
+                Tools.move_file(source_image_path, dest_image_path)
+
+    # Organize the images in train, train-aug, and val directories
+    organize_images(os.path.join(dataset_dir, 'images', 'train'), 'labels/train')
+    organize_images(os.path.join(dataset_dir, 'images', 'train-aug'), 'labels/train-aug')
+    organize_images(os.path.join(dataset_dir, 'images', 'valid'), 'labels/valid')
