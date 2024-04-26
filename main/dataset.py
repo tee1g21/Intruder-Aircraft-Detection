@@ -12,6 +12,7 @@ max_workers=12
 from tqdm.auto import tqdm
 import yaml
 import random
+import cv2
 
 # Function to create a DataFrame from images and labels
 def create_dataframe(images_path, labels_path, metadata_path):
@@ -104,6 +105,34 @@ def create_sub_dataset(dataset_dir, filtered_train_df, filtered_valid_df, class_
         yaml.dump(yaml_content, file, sort_keys=False)
 
     print(f"Dataset '{dataset_name}' created at {dataset_dir}")
+
+# zoom into aircraft on every dataset image, including validation, so to so that the aircraft is classified
+def pre_process_dataset_for_classification(dataset_dir, zoom_factor=2, max_workers=4):
+    for set_type in ['train', 'valid']:
+        image_dir = os.path.join(dataset_dir, 'images', set_type)
+        label_dir = os.path.join(dataset_dir, 'labels', set_type)
+        
+        # Get all image file paths
+        image_paths = [os.path.join(image_dir, image_name) for image_name in os.listdir(image_dir) if image_name.endswith('.jpg')]
+        
+        # Process each image
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = {executor.submit(augmenter.zoom, image_path, label_path, zoom_factor): (image_path, label_path)
+                       for image_path in image_paths
+                       for label_path in [os.path.join(label_dir, os.path.splitext(os.path.basename(image_path))[0] + '.txt')]}
+            
+            for future in tqdm(as_completed(futures), total=len(futures), desc="Processing images"):
+                image_path, label_path = futures[future]
+                try:
+                    zoomed_image, zoomed_label = future.result()  # This will re-raise any exceptions that occurred
+                    # Save the zoomed image and updated label
+                    tools.save_image(image_path, zoomed_image)
+                    tools.save_label(label_path, zoomed_label)
+                except Exception as e:
+                    print(f"An error occurred with {image_path}: {e}")
+                    # If error occurred during processing, delete the original image and label
+                    os.remove(image_path)
+                    os.remove(label_path)
 
 # corrects default YOLO labels to match class names for sub-dataset
 def correct_dataset_labels(dataset_dir, train_df, val_df, class_names):

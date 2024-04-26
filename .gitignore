@@ -4,3 +4,5 @@
 /runs/
 /yolo-venv/
 /models/
+/main/vision
+/main/FTA_DUCSS.ipynb
