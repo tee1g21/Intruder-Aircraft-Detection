@@ -164,12 +164,13 @@ class Evaluate():
 
         # Generate the confusion matrix
         conf_matrix = confusion_matrix(y_true_decoded, y_pred_argmax)
-        conf_matrix_dict = {self.class_names[i]: {self.class_names[j]: conf_matrix[i, j] for j in range(len(self.class_names))} for i in range(len(self.class_names))}
-
+        conf_matrix_dict = {
+            f'{self.class_names[i]} (T)': {f'{self.class_names[j]} (P)': conf_matrix[i, j] for j in range(len(self.class_names))}
+            for i in range(len(self.class_names))
+        }        
         
         class_report = classification_report(y_true_decoded, y_pred_argmax, target_names=self.class_names, output_dict=True )
 
-       
         if print_bool == True: 
             # Plotting using seaborn for a nicer-looking confusion matrix
             plt.figure(figsize=(10, 7))
