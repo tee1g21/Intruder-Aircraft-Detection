@@ -1,4 +1,5 @@
 """Python Class to calculate evaluation metrics for Multi-class Image Classification"""
+import tools
 
 import numpy as np
 import pandas as pd
@@ -7,6 +8,9 @@ from sklearn.metrics import roc_auc_score, confusion_matrix, classification_repo
 from sklearn.preprocessing import label_binarize
 import matplotlib.pyplot as plt
 import seaborn as sns
+import io 
+from PIL import Image
+import json
 
 class Evaluate():
     # initialize the class with train_hst, y_true, y_pred, class_names, type, print = False
@@ -165,29 +169,39 @@ class Evaluate():
         # Generate the confusion matrix
         conf_matrix = confusion_matrix(y_true_decoded, y_pred_argmax)
         conf_matrix_dict = {
-            f'{self.class_names[i]} (T)': {f'{self.class_names[j]} (P)': conf_matrix[i, j] for j in range(len(self.class_names))}
+            f'{self.class_names[i].split()[0]} (T)': {f'{self.class_names[j].split()[0]} (P)': conf_matrix[i, j] for j in range(len(self.class_names))}
             for i in range(len(self.class_names))
         }        
         
+
+        # Plotting using seaborn for a nicer-looking confusion matrix
+        fig, ax = plt.subplots(figsize=(10, 7))
+        # Plot the confusion matrix
+        sns.heatmap(conf_matrix, annot=True, fmt='g', cmap='Blues',
+                    xticklabels=self.class_names, yticklabels=self.class_names, ax=ax)
+        ax.set_xlabel('Predicted Labels')
+        ax.set_ylabel('True Labels')
+        ax.set_title(f'Confusion Matrix - {self.type}')
+        
+        # Convert to a PIL Image
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png')
+        buf.seek(0)
+        conf_matrix_PIL = Image.open(buf)
+        
+        # generate classifcation report as dictionary
         class_report = classification_report(y_true_decoded, y_pred_argmax, target_names=self.class_names, output_dict=True )
 
         if print_bool == True: 
-            # Plotting using seaborn for a nicer-looking confusion matrix
-            plt.figure(figsize=(10, 7))
-            # ['Boeing 737-800', 'Cessna Skyhawk', 'King Air C90']
-            sns.heatmap(conf_matrix, annot=True, fmt='g', cmap='Blues', xticklabels=self.class_names, yticklabels=self.class_names)
-            plt.xlabel('Predicted Labels')
-            plt.ylabel('True Labels')
-            plt.title(f'Confusion Matrix - {self.type}')     
+               
             plt.show()
                        
             print(f"Classification Report - {self.type}:\n")
             for class_name, metrics in class_report.items():
                 metrics_str = ', '.join(f"{metric}: {value:.2f}" for metric, value in metrics.items())
                 print(f"{class_name}: {metrics_str}")
-
                 
-        return conf_matrix_dict, class_report
+        return conf_matrix_PIL, conf_matrix_dict, class_report
 
     # AUC per class
     def class_auc(self, print_bool=False):
@@ -208,8 +222,10 @@ class Evaluate():
         
         return aucs
     
+    
+    
     # log metrics to ClearML
-    def log_metrics(self, task, logger, N):
+    def log_metrics(self, task, logger, N, augmentation_metadata, hyperparameters):
         
         # evaluation metrics
         avg_acc, avg_acc_val = self.average_accuracy(False)
@@ -221,9 +237,9 @@ class Evaluate():
         min_loss, min_loss_epoch = self.min_loss(False)
         diff_avg_loss = self.diff_avg_loss_lastN(N,False)
         std_loss = self.std_loss_lastN(N,False)
-        conf_matrix, class_report = self.confusion_matrix_class_report(False)
+        conf_matrix_PIL, conf_matrix_dict, class_report = self.confusion_matrix_class_report(False)
         class_auc = self.class_auc(False)
-
+        
         # log key metrics as individual scalars
         logger.report_single_value('Best Train Accuracy', best_acc)
         logger.report_single_value('Best Val Accuracy', best_acc_val)
@@ -248,14 +264,19 @@ class Evaluate():
             ]
             
             }
+        
+       
+
 
         # register as ClearML artifacts
-        task.register_artifact('metrics', pd.DataFrame(all_metrics))
-        task.register_artifact('confusion_matrix', pd.DataFrame(conf_matrix))
-        task.register_artifact('classification_report', pd.DataFrame(class_report))
+        task.upload_artifact('METRICS', pd.DataFrame(all_metrics))
+        task.upload_artifact('CONFUSION_MATRIX', pd.DataFrame(conf_matrix_dict))
+        task.upload_artifact('CLASSIFICATION_REPORT', pd.DataFrame(class_report))
+        task.upload_artifact('CLASS_AUC', pd.DataFrame(class_auc.items(), columns=['Class', 'AUC']))
+        if self.type == 'augmented':
+            task.upload_artifact('AUGMENTATION_METADATA', tools.pretty_print_dict(augmentation_metadata))
+        task.upload_artifact('HYPERPARAMETERS', tools.pretty_print_dict(hyperparameters))
+        task.upload_artifact('CONFUSION_MATRIX_IMAGE', conf_matrix_PIL)
 
-        class_auc_df = pd.DataFrame(list(class_auc.items()), columns=['Class', 'AUC'])
-        task.register_artifact('class_auc', class_auc_df)
-        
+        print('Sending metrics to clearML...')        
         task.close()
-        print('Sending metrics to clearML...')
