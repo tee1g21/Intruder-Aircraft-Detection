@@ -200,9 +200,12 @@ class Evaluate():
             for class_name, metrics in class_report.items():
                 metrics_str = ', '.join(f"{metric}: {value:.2f}" for metric, value in metrics.items())
                 print(f"{class_name}: {metrics_str}")
-                
+             
+        plt.close(fig)
+   
         return conf_matrix_PIL, conf_matrix_dict, class_report
 
+        
     # AUC per class
     def class_auc(self, print_bool=False):
         

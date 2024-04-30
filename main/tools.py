@@ -108,3 +108,10 @@ def pretty_print_dict(d, indent=0):
                 # If it's not a recognized type, print the type name
                 lines.append(f"{indent_space}    Unknown type: {type(value)}")
         return "\n".join(lines)
+
+# counts images in keras dataset directory
+def count_images(directory):
+    total_files = 0
+    for root, dirs, files in os.walk(directory):
+        total_files += len(files)
+    return total_files
