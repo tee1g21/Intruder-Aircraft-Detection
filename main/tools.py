@@ -5,7 +5,7 @@ import shutil
 import cv2
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-
+import time
 
 
 
@@ -115,3 +115,10 @@ def count_images(directory):
     for root, dirs, files in os.walk(directory):
         total_files += len(files)
     return total_files
+
+# generate unique seed 
+def generate_seed():
+    # Get current time in milliseconds
+    milliseconds = int(round(time.time() * 1000))
+    return milliseconds % (2**32)
+

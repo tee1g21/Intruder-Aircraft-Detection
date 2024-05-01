@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 max_workers=12
-from tqdm.auto import tqdm
+from tqdm import tqdm
 import yaml
 import random
 import cv2
