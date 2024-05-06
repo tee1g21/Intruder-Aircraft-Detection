@@ -5,7 +5,8 @@ import dataset as ds
 import config as cfg
 from evaluate import Evaluate
 import tools
-seed = tools.generate_seed()
+seed_time = tools.generate_seed()
+seed_const = 42
 
 from sklearn.model_selection import train_test_split
 import os
@@ -26,7 +27,7 @@ import argparse
 
 def main(RUN):
 
-    print("Seed: ", seed)
+    print("Seed: ", seed_time)
 
     # Import dataset
     # Base paths for the images and labels
@@ -50,12 +51,12 @@ def main(RUN):
     class_names = cfg.CLF_CLASS_NAMES
 
     zoom_factor = 1.5
-    epochs = 5
-    N = 2
+    epochs = 30 
+    N = 10
 
-    task_name = 'auto-test2'
+    task_name = 'auto-test8'
     task_name = f'{task_name}-{epochs}-{RUN}'
-    project_name= cfg.CLF_PROJECT_NAME #+ f'/{task_name}'
+    project_name= cfg.CLF_PROJECT_NAME + f'/automation-test'
 
 
     augmentation_metadata = {
@@ -83,14 +84,14 @@ def main(RUN):
         train_df,
         test_size=train_size,  # Number of items you want in your sample
         stratify=train_df['ac'],  # Stratify based on the combined column
-        random_state=seed  # Ensures reproducibility
+        random_state=seed_time  # Ensures reproducibility
     )
 
     _, test_val_df = train_test_split(
         valid_df,
         test_size=val_size,  # Number of items you want in your sample
         stratify=valid_df['ac'],  # Stratify based on the combined column
-        random_state=seed  # Ensures reproducibility
+        random_state=seed_time  # Ensures reproducibility
     )
 
     # create dataset directory from dataframes above
@@ -113,7 +114,8 @@ def main(RUN):
     # load datasets using keras
 
     tf.keras.backend.clear_session()
-    tf.keras.utils.set_random_seed(seed)
+
+    tf.keras.utils.set_random_seed(seed_time)
 
     
     train_dir = os.path.join(dataset_dir,'images','train')
@@ -127,23 +129,24 @@ def main(RUN):
     train_data = tf.keras.utils.image_dataset_from_directory(
         train_dir,
         batch_size=batch_size,
-        seed=seed,
+        seed=seed_time,
         image_size=(img_height, img_width),
         shuffle=True)
 
     train_aug_data = tf.keras.utils.image_dataset_from_directory(
         train_aug_dir,
         batch_size=batch_size,
-        seed=seed,
+        seed=seed_time,
         image_size=(img_height, img_width),
         shuffle=True)
 
     valid_data = tf.keras.utils.image_dataset_from_directory(
         valid_dir,
         batch_size=batch_size,
-        seed=seed,
+        seed=seed_time,
         image_size=(img_height, img_width),    
         shuffle=True)
+
 
 
     # hyper-parameters
@@ -173,8 +176,8 @@ def main(RUN):
 
     # optimise datasets
     #AUTOTUNE = tf.data.AUTOTUNE
-    #train_data = train_data.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
-    #train_aug_data = train_aug_data.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
+    #train_data = train_data.cache().shuffle(1000, seed=seed_time).prefetch(buffer_size=AUTOTUNE)
+    #train_aug_data = train_aug_data.cache().shuffle(1000, seed=seed_time).prefetch(buffer_size=AUTOTUNE)
     #valid_data = valid_data.cache().prefetch(buffer_size=AUTOTUNE)
 
 
