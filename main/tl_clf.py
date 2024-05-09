@@ -5,7 +5,6 @@ import dataset as ds
 import config as cfg
 from evaluate import Evaluate
 import tools
-seed_time = tools.generate_seed()
 seed_const = 42
 
 from sklearn.model_selection import train_test_split
@@ -25,8 +24,9 @@ import argparse
 
 
 
-def main(RUN):
+def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size, w1, w2):
 
+    seed_time = tools.generate_seed()
     print("Seed: ", seed_time)
 
     # Import dataset
@@ -43,68 +43,67 @@ def main(RUN):
     train_df = ds.create_dataframe(train_images_path, train_labels_path, metadata_path)
     valid_df = ds.create_dataframe(val_images_path, val_labels_path, metadata_path)
 
+    # always train on Palo Alto for Consitency
+    train_df = train_df[(train_df['location'] == 'Palo Alto')]
+    valid_df = valid_df[(valid_df['location'] == 'Palo Alto')]
+
+
+
     # =================================================================================================
     # TEST PARAMETERS
-    dataset_name = 'test500'
+    dataset_name = f'weather_{w1}{w2}_{train_size}'
     dataset_dir = cfg.CLF_DATASET_DIR + f'/{dataset_name}'
     project_dir = f'{cfg.CLF_PROJECT_DIR}/{dataset_name}/'
     class_names = cfg.CLF_CLASS_NAMES
 
     zoom_factor = 1.5
-    epochs = 30 
-    N = 10
+    N = int(epochs / 2)
 
-    task_name = 'auto-test8'
-    task_name = f'{task_name}-{epochs}-{RUN}'
-    project_name= cfg.CLF_PROJECT_NAME + f'/automation-test'
+    #task_name = 'auto-test9'
+    task_name = f'{task_name}-w{w1}{w2}-{epochs}-{train_size}-{RUN}'
+    project_name= cfg.CLF_PROJECT_NAME + f'/{sub_project}'
 
 
-    augmentation_metadata = {
-        'methods': {        
-            'flip': {
-                'parameters': {
-                    'orientation': 'h',  # Could be 'h' for horizontal or 'v' for vertical
-                    'p': 1.0  # Probability of applying the augmentation
-                },
-                'apply_to_percentage': 0.5  # 50% of the training images
-            }        
-        }
-    }
-
-    train_size = 500
-    val_size = 100
+    val_size = int(train_size * 0.2)
 
     # =================================================================================================
 
 
-
     # create new datasets
 
+    # fitler by weather
+    filtered_train_df = train_df[(train_df['weather'] == w1) | (train_df['weather'] == w2)]
+    filtered_valid_df = valid_df[(valid_df['weather'] == w1) | (valid_df['location'] == w2)]
+
+    # Create a combined stratification key
+    filtered_train_df['stratify_key'] = filtered_train_df['ac'] + '_' + filtered_train_df['weather'].astype(str)
+    filtered_valid_df['stratify_key'] = filtered_valid_df['ac'] + '_' + filtered_valid_df['weather'].astype(str)
+
+    # Now use this stratification key in train_test_split
     _, test_train_df = train_test_split(
-        train_df,
+        filtered_train_df,
         test_size=train_size,  # Number of items you want in your sample
-        stratify=train_df['ac'],  # Stratify based on the combined column
+        stratify=filtered_train_df['stratify_key'],  # Stratify based on the combined column
         random_state=seed_time  # Ensures reproducibility
     )
 
     _, test_val_df = train_test_split(
-        valid_df,
+        filtered_valid_df,
         test_size=val_size,  # Number of items you want in your sample
-        stratify=valid_df['ac'],  # Stratify based on the combined column
+        stratify=filtered_valid_df['stratify_key'],  # Stratify based on the combined column
         random_state=seed_time  # Ensures reproducibility
     )
-
     # create dataset directory from dataframes above
     ds.create_sub_dataset(dataset_dir, test_train_df, test_val_df, class_names)
-
-    # Pre-processing to AID classification (apply zoom factor to all images)
-    ds.pre_process_dataset_for_classification(dataset_dir, zoom_factor)
 
     # correct single class labels to accomodate for multi-class classification
     ds.correct_dataset_labels(dataset_dir, test_train_df, test_val_df, class_names)
 
     # augment dataset
     ds.augment_dataset(dataset_dir, augmentation_metadata)
+    
+    # Pre-processing to AID classification (apply zoom factor to all images)
+    ds.pre_process_dataset_for_classification(dataset_dir, zoom_factor)
 
     # create class folders within train and valid directories for keras format
     ds.reorganize_dataset_for_keras(dataset_dir)
@@ -218,6 +217,8 @@ def main(RUN):
         
         return model
 
+    ############################################################################################################
+
     # Train Pure
 
     # local logs directory
@@ -253,11 +254,13 @@ def main(RUN):
 
     # send metrics to clearML
     pure_eval.log_metrics(task, logger, N, None, hyper_params)
-
+    
 
     # close task
     print("done")
 
+
+    ############################################################################################################
 
     # Train Augmented
 

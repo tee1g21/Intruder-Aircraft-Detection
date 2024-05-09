@@ -6,6 +6,7 @@ import cv2
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import time
+import numpy as np
 
 
 
@@ -27,6 +28,7 @@ def save_image(path, image):
     image_to_save = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)    
     # Save the image
     cv2.imwrite(path, image_to_save)
+    
 def save_label(path, contents):
     # Ensure the directory exists
     os.makedirs(os.path.dirname(path), exist_ok=True)    
@@ -88,26 +90,28 @@ def overlay_bbox_image(image_path, label_path):
     
 # converts dictionary to pretty string
 def pretty_print_dict(d, indent=0):
-        lines = []
-        # Create indentation spaces
-        indent_space = ' ' * indent
-        for key, value in d.items():
-            # Add the key with a colon
-            lines.append(f"{indent_space}{key}:")
-            if isinstance(value, dict):
-                # Recursively format nested dictionaries with increased indent
-                lines.append(pretty_print_dict(value, indent=indent+2))
-            elif isinstance(value, list):
-                # Format list items with a hyphen and increased indent
-                for item in value:
-                    lines.append(f"{indent_space}    - {item}")
-            elif isinstance(value, (str, float, int, bool)):
-                # Print strings, floats, ints, and bools on the same line as the key
-                lines[-1] += f" {value}"
-            else:
-                # If it's not a recognized type, print the type name
-                lines.append(f"{indent_space}    Unknown type: {type(value)}")
-        return "\n".join(lines)
+    lines = []
+    indent_space = ' ' * indent
+    for key, value in d.items():
+        # Add the key with a colon
+        lines.append(f"{indent_space}{key}:")
+        if isinstance(value, dict):
+            # Recursively format nested dictionaries with increased indent
+            lines.append(pretty_print_dict(value, indent=indent+2))
+        elif isinstance(value, list):
+            # Format list items with a hyphen and increased indent
+            for item in value:
+                lines.append(f"{indent_space}    - {item}")
+        elif isinstance(value, np.ndarray):
+            for item in value:
+                lines.append(f"{indent_space}    - {item}")
+        elif isinstance(value, (str, float, int, bool)):
+            # Print strings, floats, ints, and bools on the same line as the key
+            lines[-1] += f" {value}"
+        else:
+            # If it's not a recognized type, print the type name
+            lines.append(f"{indent_space}    Unknown type: {type(value)}")
+    return "\n".join(lines)
 
 # counts images in keras dataset directory
 def count_images(directory):

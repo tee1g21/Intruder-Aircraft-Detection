@@ -107,8 +107,9 @@ def create_sub_dataset(dataset_dir, filtered_train_df, filtered_valid_df, class_
     print(f"Dataset '{dataset_name}' created at {dataset_dir}")
 
 # zoom into aircraft on every dataset image, including validation, so to so that the aircraft is classified
-def pre_process_dataset_for_classification(dataset_dir, zoom_factor=2, max_workers=4):
-    for set_type in ['train', 'valid']:
+def pre_process_dataset_for_classification(dataset_dir, zoom_factor):
+    
+    for set_type in ['train', 'train-aug', 'valid']:
         image_dir = os.path.join(dataset_dir, 'images', set_type)
         label_dir = os.path.join(dataset_dir, 'labels', set_type)
         

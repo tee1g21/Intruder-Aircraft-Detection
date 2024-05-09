@@ -17,6 +17,6 @@ CLF_CLASS_NAMES = ['Cessna Skyhawk','Boeing 737-800', 'King Air C90'] # TODO: gi
 CLF_PROJECT_NAME = f'{PROJECT_NAME}/tl_clf'
 
 # RCNN specific
-RCNN_DATASET_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets/RCNN'
-RCNN_PROJECT_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/logs/RCNN'
-RCNN_CLASS_NAMES = YOLO_CLASS_NAMES # keep the same for safe testing
+#RCNN_DATASET_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets/RCNN'
+#RCNN_PROJECT_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/logs/RCNN'
+#RCNN_CLASS_NAMES = YOLO_CLASS_NAMES # keep the same for safe testing

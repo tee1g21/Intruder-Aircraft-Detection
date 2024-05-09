@@ -38,16 +38,16 @@ def flip(image_path, label_path, orientation, p=1.0):
     return augmented_image, augmented_label
 
 # rotation with specified angle
-def rotate(image_path, label_path, angle, p=1.0):
+def rotate(image_path, label_path, angle_limit, p=1.0):
    
-    # Load image and label
+       # Load image and label
     image = cv2.imread(image_path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)    
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     bboxes, class_labels = tools.load_yolo_labels(label_path)
     
-    # Define the augmentation with rotation
+    # Define the augmentation with random rotation
     transform = A.Compose([
-        A.Rotate(limit=(angle, angle), p=p, border_mode=cv2.BORDER_CONSTANT),
+        A.Rotate(limit=(-angle_limit, angle_limit), p=p, border_mode=cv2.BORDER_CONSTANT),
     ], bbox_params=A.BboxParams(format='yolo', label_fields=['class_labels']))
     
     # Apply transformation
@@ -220,9 +220,9 @@ def hsv_shift(image_path, type, shift, p=1.0):
     # Define the augmentation pipeline
     transform = A.Compose([
         A.HueSaturationValue(
-            hue_shift_limit=(hue_shift, hue_shift),  # Setting both limits to the same value for exact shift
-            sat_shift_limit=(sat_shift, sat_shift),  
-            val_shift_limit=(val_shift, val_shift),  
+            hue_shift_limit=(-hue_shift, hue_shift),  # Setting both limits to the same value for exact shift
+            sat_shift_limit=(-sat_shift, sat_shift),  
+            val_shift_limit=(-val_shift, val_shift),  
             p=p
         )
     ])
