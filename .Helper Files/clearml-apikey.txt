@@ -1,0 +1,11 @@
+api {
+  # Tom Evans's workspace
+  web_server: https://app.clear.ml
+  api_server: https://api.clear.ml
+  files_server: https://files.clear.ml
+  # intruder-aircraft-laptop
+  credentials {
+    "access_key" = "T574OB11D3LPYTFR0YYS"
+    "secret_key" = "CAik8Jemk2LFpPJjtfuwRQrFFJiRlKpSBPliuk0tENVHrOn9Ox"
+  }
+}
