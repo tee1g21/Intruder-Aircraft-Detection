@@ -5,6 +5,8 @@ import cv2
 import albumentations as A
 import numpy as np
 import os
+import random
+import uuid
 
 # horizontal/vertical flip
 def flip(image_path, label_path, orientation, p=1.0):
@@ -67,13 +69,17 @@ def brightness_and_contrast(image_path, alpha=1.0, beta=0):
     Beta - brightness control (-100 to 100)
     """
 
-    # Load the image
+     # Load the image
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    
+
+    # Generate random alpha and beta within the limits
+    rnd_alpha = random.uniform(1.0, alpha)  # Contrast control between 1.0 and alpha_limit
+    rnd_beta = random.uniform(0, alpha)     # Brightness control between 0 and beta_limit
+
     # Apply brightness and contrast adjustment
-    augmented_image = np.clip(alpha * image.astype(np.float32) + beta, 0, 255).astype(np.uint8)
-    
+    augmented_image = np.clip(rnd_alpha * image.astype(np.float32) + rnd_beta, 0, 255).astype(np.uint8)
+
     return augmented_image
 
 # histogram equalisation with CLAHE
@@ -244,9 +250,12 @@ def augment_image(image_path, images_aug_dir, label_path, labels_aug_dir, method
     if image_name != label_name:
         raise ValueError(f"ERROR: Filename mismatch: {image_name} and {label_name} do not match.")
 
+    # Generate a unique identifier for each augmented file
+    unique_id = uuid.uuid4().hex[:8]
+
     # create filenames for augmented images
-    aug_image_filename = f"{image_name}-{method_name}.jpg"
-    aug_label_filename = f"{label_name}-{method_name}.txt"
+    aug_image_filename = f"{image_name}-{method_name}-{unique_id}.jpg"
+    aug_label_filename = f"{label_name}-{method_name}-{unique_id}.txt"
     
     # Determine which augmentation function to call based on the method name
     if method_name == 'flip':
