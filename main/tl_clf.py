@@ -73,11 +73,12 @@ def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size,
 
     # fitler by weather
     filtered_train_df = train_df[(train_df['weather'] == w1) | (train_df['weather'] == w2)]
-    filtered_valid_df = valid_df[(valid_df['weather'] == w1) | (valid_df['location'] == w2)]
+    filtered_valid_df = valid_df[(valid_df['weather'] == w1) | (valid_df['weather'] == w2)]
 
     # Create a combined stratification key
     filtered_train_df['stratify_key'] = filtered_train_df['ac'] + '_' + filtered_train_df['weather'].astype(str)
     filtered_valid_df['stratify_key'] = filtered_valid_df['ac'] + '_' + filtered_valid_df['weather'].astype(str)
+
 
     # Now use this stratification key in train_test_split
     _, test_train_df = train_test_split(
