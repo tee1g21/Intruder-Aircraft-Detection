@@ -4,5 +4,4 @@
 /runs/
 /yolo-venv/
 /models/
-/results/round1/figures/
-/results/round2/figures/
+/results/*/figures/
