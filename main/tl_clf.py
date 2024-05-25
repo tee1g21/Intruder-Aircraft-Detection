@@ -29,6 +29,9 @@ def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size,
     seed_time = tools.generate_seed()
     print("Seed: ", seed_time)
 
+    print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+
+
     # Import dataset
     # Base paths for the images and labels
     train_images_path = f'{cfg.BASE_DATASET}/images/train'
