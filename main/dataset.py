@@ -230,50 +230,6 @@ def copy_directory_contents_concurrently(src_dir, dst_dir):
         list(tqdm(executor.map(tools.copy_file, src_files, dst_files), total=len(src_files), desc="Copying files"))
 
 # Creates augmented dataset, using metadata dictionary to define augmentation methods
-#def augment_dataset(original_dataset_path, augmentation_metadata):
-#    
-#    # reconstruct dataset with augmentation directories and yaml
-#    create_augmented_dataset_structure(original_dataset_path)
-#
-#    # new train directories
-#    images_dir = original_dataset_path + '/images/train/'
-#    images_aug_dir = original_dataset_path + '/images/train-aug/'
-#    labels_dir = original_dataset_path + '/labels/train/'
-#    labels_aug_dir = original_dataset_path + '/labels/train-aug/'
-#
-#    # copy train and image labels to train-aug
-#    copy_directory_contents_concurrently(images_dir, images_aug_dir)
-#    copy_directory_contents_concurrently(labels_dir, labels_aug_dir)
-#
-#    # training images 
-#    image_paths = [os.path.join(images_aug_dir, img_name) for img_name in os.listdir(images_aug_dir)]
-#
-#    # Apply augmentations based on metadata
-#    total_augmentations = sum(int(len(image_paths) * info['apply_to_percentage']) for info in augmentation_metadata['methods'].values())
-#    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-#        futures = []
-#        for method_name, method_info in augmentation_metadata['methods'].items():
-#            selected_images = random.sample(image_paths, int(len(image_paths) * method_info['apply_to_percentage']))
-#            selected_labels = [path.replace(images_aug_dir, labels_aug_dir).replace('.jpg', '.txt') for path in selected_images]
-#            
-#            for image_path, label_path in zip(selected_images, selected_labels):
-#                # Schedule the augmentation to be applied concurrently
-#                futures.append(executor.submit(augmenter.augment_image, image_path, images_aug_dir, label_path, labels_aug_dir, method_name, method_info))
-#
-#        # Progress bar for the augmentation tasks
-#        for _ in tqdm(as_completed(futures), total=total_augmentations, desc="Applying augmentations"):
-#            pass
-#    
-#    # tries and returns error for every image that failed to be augmented - most likely bounding box boundary error
-#    for future in futures:
-#        if not future.done():
-#            print("A future did not complete.")  
-#        try:
-#            future.result()  # re-raise exception that occurred
-#        except Exception as e:
-#            print(f"An error occurred: {e}")
-
-
 def augment_dataset(original_dataset_path, augmentation_metadata, max_workers=4):
     
     # Reconstruct dataset with augmentation directories

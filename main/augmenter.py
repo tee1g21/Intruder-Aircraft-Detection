@@ -262,6 +262,8 @@ def augment_image(image_path, images_aug_dir, label_path, labels_aug_dir, method
         augmented_image, augmented_label = flip(image_path, label_path, **method_info['parameters'])
     elif method_name == 'rotate':
         augmented_image, augmented_label = rotate(image_path, label_path, **method_info['parameters'])
+    elif method_name == 'rotate2':
+        augmented_image, augmented_label = rotate(image_path, label_path, **method_info['parameters'])
     elif method_name == 'bnc':
         augmented_image = brightness_and_contrast(image_path, **method_info['parameters'])
         augmented_label = open(label_path).read()  # No change to label for this augmentation

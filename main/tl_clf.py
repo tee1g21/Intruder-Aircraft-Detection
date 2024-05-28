@@ -67,7 +67,7 @@ def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size,
     project_name= cfg.CLF_PROJECT_NAME + f'/{sub_project}'
 
 
-    val_size = int(train_size * 0.2)
+    val_size = int(train_size * 0.25)
 
     # =================================================================================================
 
