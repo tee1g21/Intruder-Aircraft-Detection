@@ -1,0 +1,13 @@
+method,weather,%inc_auc,%inc_best_accuracy,%inc_max_f1
+rotate(5),01,3.529,5.99,6.258
+rotate(5),23,2.72,33.595,78.947
+rotate(5),45,-3.448,27.087,51.311
+"rotate(5,20)",01,-0.398,3.457,3.856
+"rotate(5,20)",23,0.613,32.965,84.868
+"rotate(5,20)",45,1.4,13.655,29.653
+histEq+Contrast,01,3.614,26.72,64.927
+histEq+Contrast,23,2.74,31.818,134.722
+histEq+Contrast,45,-2.209,14.468,31.22
+histEq+C+Rotate,01,-0.803,8.163,15.029
+histEq+C+Rotate,23,-5.078,8.226,9.363
+histEq+C+Rotate,45,-1.619,72.708,1204.839
