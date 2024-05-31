@@ -24,7 +24,7 @@ import argparse
 
 
 
-def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size, w1, w2):
+def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size, w1, w2, new_image_count):
 
     seed_time = tools.generate_seed()
     print("Seed: ", seed_time)
@@ -106,6 +106,9 @@ def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size,
     # augment dataset
     ds.augment_dataset(dataset_dir, augmentation_metadata)
     
+    # append new images to dataset train set (only need for final CLF tests)
+    ds.append_new_train_images(dataset_dir, new_image_count, filtered_train_df, seed_time, class_names)
+    
     # Pre-processing to AID classification (apply zoom factor to all images)
     ds.pre_process_dataset_for_classification(dataset_dir, zoom_factor)
 
@@ -117,9 +120,6 @@ def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size,
     # load datasets using keras
 
     tf.keras.backend.clear_session()
-
-    tf.keras.utils.set_random_seed(seed_time)
-
     
     train_dir = os.path.join(dataset_dir,'images','train')
     train_aug_dir = os.path.join(dataset_dir,'images','train-aug')
@@ -150,6 +150,8 @@ def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size,
         image_size=(img_height, img_width),    
         shuffle=True)
 
+
+    tf.keras.utils.set_random_seed(seed_const)
 
 
     # hyper-parameters

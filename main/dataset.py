@@ -13,6 +13,8 @@ from tqdm import tqdm
 import yaml
 import random
 import cv2
+from sklearn.model_selection import train_test_split
+
 
 # Function to create a DataFrame from images and labels
 def create_dataframe(images_path, labels_path, metadata_path):
@@ -135,6 +137,29 @@ def pre_process_dataset_for_classification(dataset_dir, zoom_factor):
                     os.remove(image_path)
                     os.remove(label_path)
 
+
+# Function to update the labels in a given directory
+def update_labels(dataset_dir, labels_path, label_mapping, type):
+    print(f'Processing {type} labels in {os.path.basename(dataset_dir)}:')
+    for label_filename in tqdm(label_mapping, desc=f'Processing labels'):
+        new_class_index = label_mapping[label_filename]
+        label_file_path = os.path.join(labels_path, label_filename)
+        if os.path.isfile(label_file_path):
+            with open(label_file_path, 'r') as file:
+                lines = file.readlines()
+
+            updated_lines = []
+            for line in lines:
+                parts = line.strip().split()
+                if parts:
+                    parts[0] = str(new_class_index)  # Update the class index
+                    updated_lines.append(' '.join(parts))
+            
+            with open(label_file_path, 'w') as file:
+                file.writelines('\n'.join(updated_lines))
+        else:
+            print(f"File not found: {label_file_path}")
+
 # corrects default YOLO labels to match class names for sub-dataset
 def correct_dataset_labels(dataset_dir, train_df, val_df, class_names):
     # Assuming dataset_dir is the root that contains 'labels/train' and 'labels/valid'
@@ -145,31 +170,9 @@ def correct_dataset_labels(dataset_dir, train_df, val_df, class_names):
     train_label_mapping = {os.path.basename(row['label_path']): class_names.index(row['ac']) for _, row in train_df.iterrows()}
     val_label_mapping = {os.path.basename(row['label_path']): class_names.index(row['ac']) for _, row in val_df.iterrows()}
 
-    # Function to update the labels in a given directory
-    def update_labels(labels_path, label_mapping, type):
-        print(f'Processing {type} labels in {os.path.basename(dataset_dir)}:')
-        for label_filename in tqdm(label_mapping, desc=f'Processing labels'):
-            new_class_index = label_mapping[label_filename]
-            label_file_path = os.path.join(labels_path, label_filename)
-            if os.path.isfile(label_file_path):
-                with open(label_file_path, 'r') as file:
-                    lines = file.readlines()
-
-                updated_lines = []
-                for line in lines:
-                    parts = line.strip().split()
-                    if parts:
-                        parts[0] = str(new_class_index)  # Update the class index
-                        updated_lines.append(' '.join(parts))
-                
-                with open(label_file_path, 'w') as file:
-                    file.writelines('\n'.join(updated_lines))
-            else:
-                print(f"File not found: {label_file_path}")
-
     # Update labels in both train and validation directories using respective mappings
-    update_labels(train_labels_path, train_label_mapping, 'train')
-    update_labels(val_labels_path, val_label_mapping, 'valid')
+    update_labels(dataset_dir, train_labels_path, train_label_mapping, 'train')
+    update_labels(dataset_dir, val_labels_path, val_label_mapping, 'valid')
 
     print("Label correction completed.")
 
@@ -230,7 +233,7 @@ def copy_directory_contents_concurrently(src_dir, dst_dir):
         list(tqdm(executor.map(tools.copy_file, src_files, dst_files), total=len(src_files), desc="Copying files"))
 
 # Creates augmented dataset, using metadata dictionary to define augmentation methods
-def augment_dataset(original_dataset_path, augmentation_metadata, max_workers=4):
+def augment_dataset(original_dataset_path, augmentation_metadata):
     
     # Reconstruct dataset with augmentation directories
     create_augmented_dataset_structure(original_dataset_path)
@@ -274,7 +277,7 @@ def augment_dataset(original_dataset_path, augmentation_metadata, max_workers=4)
             print(f"An error occurred: {e}")
 
 
-            
+# reorganizes dataset for keras         
 def reorganize_dataset_for_keras(dataset_dir):
     
     # extract dataset name
@@ -315,3 +318,53 @@ def reorganize_dataset_for_keras(dataset_dir):
     organize_images(os.path.join(dataset_dir, 'images', 'train'), 'labels/train')
     organize_images(os.path.join(dataset_dir, 'images', 'train-aug'), 'labels/train-aug')
     organize_images(os.path.join(dataset_dir, 'images', 'valid'), 'labels/valid')
+    
+
+# adds images to train set to make train and train-aug equal in size
+def append_new_train_images(dataset_dir, N, master_df, seed_time, class_names):
+    
+    # image and label directories
+    dataset_dir = Path(dataset_dir)
+    images_dir = dataset_dir / 'images' / 'train'
+    labels_dir = dataset_dir / 'labels' / 'train'
+
+    # list the existing images in the train directory
+    existing_images = set([file.name for file in images_dir.glob('*.jpg')])
+
+    # Filter parent dataframe to only include entries not already in the dataset
+    available_df = master_df[~master_df['image_path'].apply(lambda x: Path(x).name in existing_images)]
+
+    # If the stratify column is not provided in the DataFrame, it will be generated here.
+    if 'stratify_key' not in available_df.columns:
+        available_df['stratify_key'] = available_df['ac'] + '_' + available_df['weather'].astype(str)
+
+    # Ensure that there are enough images to sample from
+    if len(available_df) < N:
+        raise ValueError("Not enough unique images available to meet the request.")
+
+    # Split to get the required number of unique new images
+    _, new_train_df = train_test_split(
+        available_df,
+        test_size=N,  # Number of items you want in your sample
+        stratify=available_df['stratify_key'],  # Stratify based on the combined column
+        random_state=seed_time  # Ensures reproducibility
+    )
+
+    # Prepare files to be copied using multithreading
+    tasks = []
+    for _, row in new_train_df.iterrows():
+        source_image_path = Path(row['image_path'])
+        source_label_path = Path(row['label_path'])
+
+        target_image_path = images_dir / source_image_path.name
+        target_label_path = labels_dir / source_label_path.name
+
+        tasks.append((source_image_path, target_image_path))
+        tasks.append((source_label_path, target_label_path))
+
+    # Use ThreadPoolExecutor to copy files concurrently
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        list(tqdm(executor.map(lambda x: tools.copy_file(*x), tasks), total=len(tasks), desc="Appending train files"))
+
+    train_label_mapping = {os.path.basename(row['label_path']): class_names.index(row['ac']) for _, row in new_train_df.iterrows()}
+    update_labels(dataset_dir, labels_dir, train_label_mapping, 'train')
