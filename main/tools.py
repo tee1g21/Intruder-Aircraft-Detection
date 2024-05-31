@@ -126,3 +126,11 @@ def generate_seed():
     milliseconds = int(round(time.time() * 1000))
     return milliseconds % (2**32)
 
+# round to 3 significant figures
+def round_to_3sf(value):
+    if isinstance(value, np.ndarray):
+        return np.vectorize(lambda x: float(f"{x:.3g}"))(value)  # Apply rounding using a vectorized function
+    elif isinstance(value, list):
+        return [float(f"{v:.3g}") for v in value]
+    else:
+        return float(f"{value:.3g}")

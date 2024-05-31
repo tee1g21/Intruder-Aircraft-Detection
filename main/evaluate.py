@@ -283,3 +283,18 @@ class Evaluate():
 
         print('Sending metrics to clearML...')        
         task.close()
+
+    def get_yolo_metrics_dict(metrics):
+
+        f1_avg = np.mean(metrics.box.f1)
+
+        metrics_dict = {
+            'mAP_50-95': tools.round_to_3sf(metrics.box.map),     # Mean Average Precision from IoU=0.50 to 0.95
+            'mAP_50': tools.round_to_3sf(metrics.box.map50),      # Mean Average Precision at IoU=0.50
+            'mAP_75':  tools.round_to_3sf(metrics.box.map75),      # Mean Average Precision at IoU=0.75
+            'mAP_per_class':  tools.round_to_3sf(metrics.box.maps), # List of mAP from IoU=0.50 to 0.95 for each category
+            'f1_per_class':  tools.round_to_3sf(metrics.box.f1), 
+            'f1_avg':  tools.round_to_3sf(f1_avg),   
+        }
+    
+        return metrics_dict

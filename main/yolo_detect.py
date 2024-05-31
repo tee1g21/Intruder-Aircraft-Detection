@@ -4,6 +4,7 @@
 import dataset as ds
 import config as cfg
 import tools
+from evaluate import Evaluate
 
 import torch
 from ultralytics import settings
@@ -13,11 +14,11 @@ from sklearn.model_selection import train_test_split
 from clearml import Task
 import clearml
 clearml.browser_login()
-import gc
+
 import argparse
 
 
-def main(RUN):
+def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size, w1, w2):
 
     seed_time = tools.generate_seed()
     print("Seed: ", seed_time)
@@ -48,71 +49,53 @@ def main(RUN):
 
     # =================================================================================================
     # TEST PARAMETERS
-    dataset_name = 'test500'
-
-    # project and task constant parameters
-    #project_name= cfg.YOLO_PROJECT_NAME
+    dataset_name = f'weather_{w1}{w2}_{train_size}'
     dataset_dir = f'{cfg.YOLO_DATASET_DIR}/{dataset_name}'
     project_dir = f'{cfg.YOLO_PROJECT_DIR}/{dataset_name}/'
     class_names = cfg.YOLO_CLASS_NAMES
 
     # task specifc training parameters
-    epochs = 5
     model_variant = "yolov8n"
 
-    task_name= task_name = 'epoch_test'
-    task_name = f'{task_name}-{epochs}-{RUN}'
-    project_name= cfg.YOLO_PROJECT_NAME + f'/epoch-test'
+    task_name = f'{task_name}-w{w1}{w2}-{epochs}-{train_size}-{RUN}'
+    project_name= cfg.YOLO_PROJECT_NAME + f'/{sub_project}'
 
-    """
-    Methods: 
-    - flip
-    - rotate
-    - bnc
-    - gaussian
-    - histEq
-    - whiteBal
-    - sharpen
-    - zoom
-    - hsv
-    """
-
-    augmentation_metadata = {
-        'methods': {        
-            'flip': {
-                'parameters': {
-                    'orientation': 'h',  # Could be 'h' for horizontal or 'v' for vertical
-                    'p': 1.0  # Probability of applying the augmentation
-                },
-                'apply_to_percentage': 0.5  # 50% of the training images
-            }        
-        }
-    }
-
-    train_size = 250
-    val_size = int(train_size * 0.2)
+    val_size = int(train_size * 0.25)
 
     # =================================================================================================
 
+    # always train on Palo Alto for Consitency
+    train_df = train_df[(train_df['location'] == 'Palo Alto')]
+    valid_df = valid_df[(valid_df['location'] == 'Palo Alto')]
 
-    # create new datasets
+
+    # fitler by weather
+    filtered_train_df = train_df[(train_df['weather'] == w1) | (train_df['weather'] == w2)]
+    filtered_valid_df = valid_df[(valid_df['weather'] == w1) | (valid_df['weather'] == w2)]
+
+    # Create a combined stratification key
+    filtered_train_df['stratify_key'] = filtered_train_df['ac'] + '_' + filtered_train_df['weather'].astype(str)
+    filtered_valid_df['stratify_key'] = filtered_valid_df['ac'] + '_' + filtered_valid_df['weather'].astype(str)
 
     _, test_train_df = train_test_split(
-    train_df,
-    test_size=train_size,  # Number of items you want in your sample
-    stratify=train_df['ac'],  # Stratify based on the combined column
-    random_state=seed_time  # Ensures reproducibility
-    )   
+        filtered_train_df,
+        test_size=train_size,  # Number of items you want in your sample
+        stratify=filtered_train_df['stratify_key'],  # Stratify based on the combined column
+        random_state=seed_time  # Ensures reproducibility
+    )
 
     _, test_val_df = train_test_split(
-        valid_df,
+        filtered_valid_df,
         test_size=val_size,  # Number of items you want in your sample
-        stratify=valid_df['ac'],  # Stratify based on the combined column
+        stratify=filtered_valid_df['stratify_key'],  # Stratify based on the combined column
         random_state=seed_time  # Ensures reproducibility
     )
 
     # create sub dataset
     ds.create_sub_dataset(dataset_dir, test_train_df, test_val_df, class_names)
+
+    # correct dataset labels
+    ds.correct_dataset_labels(dataset_dir, test_train_df, test_val_df, class_names)
 
     # augment dataset
     ds.augment_dataset(dataset_dir, augmentation_metadata)
@@ -129,51 +112,39 @@ def main(RUN):
     project =  project_dir + 'pure' #save_dir # weight save path
 
     # Create ClearML task
-    task = Task.init(
+    task_pure = Task.init(
         project_name=project_name,
         task_name=f"{task_name}-pure"
     )
-    task.set_parameter("model_variant", model_variant)
+    task_pure.set_parameter("model_variant", model_variant)
 
     # Define Yolo model
     #model = YOLO(f'{model_variant}.yaml') # train on model which is not pre-trained
-    model = YOLO(f'{model_variant}.pt')
+    model_pure = YOLO(f'{model_variant}.pt')
 
     #train args
-    args = dict(data=dataset_path, 
+    args_pure = dict(data=dataset_path, 
                 epochs=epochs, 
                 device=0, 
                 #close_mosaic=epochs, # disable mosaic augmentation
                 seed=42
                 )
-    task.connect(args)
+    task_pure.connect(args_pure)
 
     # train model
-    results =model.train(**args, project=project)
+    results_pure=model_pure.train(**args_pure, project=project)
 
     # validate model
-    metrics = model.val()
-    metrics_dict = {
-        'mAP_50-95': metrics.box.map,     # Mean Average Precision from IoU=0.50 to 0.95
-        'mAP_50': metrics.box.map50,      # Mean Average Precision at IoU=0.50
-        'mAP_75': metrics.box.map75,      # Mean Average Precision at IoU=0.75
-        'mAP_per_class': metrics.box.maps, # List of mAP from IoU=0.50 to 0.95 for each category
-        'Precision': metrics.box.mp,      # Precision
-        'Recall': metrics.box.mr          # Recall
-    }
+    metrics_pure = model_pure.val()
+    metrics_dict_pure = Evaluate.get_yolo_metrics_dict(metrics_pure)
 
+    # Log the metrics to ClearML
     print("Uploading metrics to ClearML ...")
-    task.upload_artifact('VAL_METRICS', tools.pretty_print_dict(metrics_dict))
+    task_pure.upload_artifact('VAL_METRICS', tools.pretty_print_dict(metrics_dict_pure))
 
-    # close task for next run
-    task.close()
+    print("Closing Task Pure ...")
+    task_pure.close()
     print("done")
-
-    #clear variables from memory
-    task = None
-    model = None
-    args = None
-    results = None
 
 
     ############################################################################################################
@@ -181,62 +152,42 @@ def main(RUN):
     # Train Augmented
     print("Training on augmented dataset ...")
     
-    # clear variables
-    torch.cuda.empty_cache()
-    gc.collect()
-
-
     # dataset location
     dataset_path=f'{dataset_dir}\\{dataset_name}-aug.yaml'
     project =  project_dir + 'augmented' #save_dir # weight save path
 
     # Create ClearML task
-    task = Task.init(
+    task_aug = Task.init(
         project_name=project_name,
         task_name=f"{task_name}-aug"
     )
-    task.set_parameter("model_variant", model_variant) 
+    task_aug.set_parameter("model_variant", model_variant) 
 
     # Define Yolo model
     #model = YOLO('yolov8n.yaml')
-    model = YOLO('yolov8n.pt')
+    model_aug = YOLO('yolov8n.pt')
 
     # train model
-    args = dict(data=dataset_path, 
-                epochs=epochs, 
-                device=0, 
-                #close_mosaic=epochs, # disable mosaic augmentation
-                seed=42
-                )
-    task.connect(args)
-
-    # train model
-    results =model.train(**args, project=project)
+    results_aug = model_aug.train(data=dataset_path, 
+                        epochs=epochs, 
+                        device=0, 
+                        project=project,
+                        #close_mosaic=epochs, # disable mosaic augmentation
+                        seed=42)
 
     # validate model
-    metrics = model.val()
-    metrics_dict = {
-        'mAP_50-95': metrics.box.map,     # Mean Average Precision from IoU=0.50 to 0.95
-        'mAP_50': metrics.box.map50,      # Mean Average Precision at IoU=0.50
-        'mAP_75': metrics.box.map75,      # Mean Average Precision at IoU=0.75
-        'mAP_per_class': metrics.box.maps, # List of mAP from IoU=0.50 to 0.95 for each category
-        'Precision': metrics.box.mp,      # Precision
-        'Recall': metrics.box.mr          # Recall
-    }
+    metrics_aug = model_aug.val()
+    metrics_dict_aug = Evaluate.get_yolo_metrics_dict(metrics_aug)
 
+    # Log the metrics to ClearML
     print("Uploading metrics to ClearML ...")
-    task.upload_artifact('VAL_METRICS', tools.pretty_print_dict(metrics_dict))
-    task.upload_artifact('AUGMENTATION_METADATA', tools.pretty_print_dict(augmentation_metadata))
+    task_aug.upload_artifact('VAL_METRICS', tools.pretty_print_dict(metrics_dict_aug))
+    task_aug.upload_artifact('AUGMENTATION_METADATA', tools.pretty_print_dict(augmentation_metadata))
 
+    print("Closing Task Augmented ...")
+    task_aug.close()
 
-    # close task for next/last run
-    task.close()
     print("done")
-    
-    model = None
-    args = None
-    results = None
-    metrics = None
     
     
 if __name__ == "__main__":

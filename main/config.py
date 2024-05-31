@@ -9,7 +9,8 @@ PROJECT_NAME = 'Intruder-Aircraft-Detection'
 YOLO_DATASET_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets/YOLOv8'
 YOLO_PROJECT_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/logs/YOLOv8'
 YOLO_PROJECT_NAME = f'{PROJECT_NAME}/YOLOv8'
-YOLO_CLASS_NAMES = ['aircraft']
+#YOLO_CLASS_NAMES = ['aircraft']
+YOLO_CLASS_NAMES = ['Cessna Skyhawk','Boeing 737-800', 'King Air C90'] # TODO: give simpler class name (eg. cessna, boeing, king-air)
 
 # Custom classifier specific
 CLF_DATASET_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets/Custom'
