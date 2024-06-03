@@ -10,6 +10,7 @@ import torch
 from ultralytics import settings
 from ultralytics import YOLO
 from sklearn.model_selection import train_test_split
+import gc
 
 from clearml import Task
 import clearml
@@ -60,7 +61,7 @@ def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size,
     task_name = f'{task_name}-w{w1}{w2}-{epochs}-{train_size}-{RUN}'
     project_name= cfg.YOLO_PROJECT_NAME + f'/{sub_project}'
 
-    val_size = int(train_size * 0.25)
+    val_size = int(train_size * 0.2)
 
     # =================================================================================================
 
@@ -146,6 +147,12 @@ def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size,
     task_pure.close()
     print("done")
 
+    #model_pure = None
+    #task_pure = None
+    #args_pure = None
+    #results_pure = None
+    #metrics_pure = None
+    #gc.collect()
 
     ############################################################################################################
 
