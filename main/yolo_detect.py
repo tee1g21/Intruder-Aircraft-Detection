@@ -1,23 +1,53 @@
-"""Python file accompanying the tl_clf.ipynb notebook."""
+"""
+YOLO detection training and evaluation script.
+
+This module defines the main training pipeline for a YOLO-based object detection model using YOLOv8 and ClearML.
+It handles data loading, preprocessing, augmentation, model training, and evaluation, and logs metrics to ClearML.
+
+Functions:
+    main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size, w1, w2):
+        Main function to set up and run the training and evaluation pipeline for both pure and augmented datasets.
+
+Details:
+    The `main` function performs the following steps:
+    - Generates a seed for reproducibility.
+    - Sets up GPU utilization.
+    - Loads the training and validation datasets and creates DataFrames.
+    - Filters data based on specified conditions (e.g., weather).
+    - Splits the data into training and validation sets using stratified sampling.
+    - Creates and augments the dataset.
+    - Defines and trains YOLO models on both pure and augmented datasets.
+    - Evaluates the models, logs the metrics, and uploads them to ClearML.
+    - Uses ClearML to manage and log experiments.
+
+Parameters:
+    RUN (int): The run number for this training session.
+    augmentation_metadata (dict): Metadata specifying the augmentation methods to apply.
+    task_name (str): Name of the task for logging.
+    sub_project (str): Sub-project name for organizing tasks.
+    epochs (int): Number of epochs to train the model.
+    train_size (int): Size of the training dataset.
+    w1 (str): First weather condition for filtering data.
+    w2 (str): Second weather condition for filtering data.
+
+Returns:
+    None
+"""
 
 # Import modules
 import dataset as ds
 import config as cfg
 import tools
 from evaluate import Evaluate
-
 import torch
 from ultralytics import settings
 from ultralytics import YOLO
 from sklearn.model_selection import train_test_split
 import gc
-
 from clearml import Task
 import clearml
 clearml.browser_login()
-
 import argparse
-
 
 def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size, w1, w2):
 

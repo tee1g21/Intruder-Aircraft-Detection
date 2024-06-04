@@ -1,4 +1,16 @@
-"""Python File containing methods to handle the main dataset, create sub datasets and to augment these datasets"""
+"""
+This dataset module provides comprehensive tools for managing, augmenting, and organizing datasets. It includes functions to create data frames,
+copy files concurrently, augment datasets, and reorganize them for compatibility with frameworks like Keras.
+
+Key Functions:
+- create_dataframe: Creates a DataFrame from image and label paths, integrating metadata for comprehensive dataset management.
+- copy_dataframe_files_concurrently: Copies image and label files listed in a DataFrame to specified directories using concurrent execution.
+- create_sub_dataset: Establishes a structured sub-dataset within a specified directory for targeted analysis or processing.
+- augment_dataset: Augments a dataset by applying specified methods, enhancing data variability and robustness for training models.
+- reorganize_dataset_for_keras: Organizes a dataset into class-specific subdirectories suitable for Keras' data loading utilities.
+- append_new_train_images: Expands an existing dataset with additional training images to ensure diverse and balanced data.
+
+"""
 
 import tools
 import augmenter
@@ -18,6 +30,17 @@ from sklearn.model_selection import train_test_split
 
 # Function to create a DataFrame from images and labels
 def create_dataframe(images_path, labels_path, metadata_path):
+    """
+    Loads image and label paths and their corresponding metadata into a DataFrame.
+
+    Parameters:
+        images_path (str): Path to the directory of image files.
+        labels_path (str): Path to the directory of label files.
+        metadata_path (str): Path to the metadata JSON file.
+
+    Returns:
+        DataFrame: DataFrame combining image and label paths with expanded metadata.
+    """
 
     # Load metadata
     with open(metadata_path, 'r') as file:
@@ -60,20 +83,44 @@ def create_dataframe(images_path, labels_path, metadata_path):
 
 # Copies files from dataframe to new dataset - with multithreading
 def copy_dataframe_files_concurrently(df, img_dest_dir, label_dest_dir):
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            # Prepare futures for image and label copying
-            futures = [executor.submit(tools.copy_file, row['image_path'], img_dest_dir / f"{Path(row['image_path']).name}") for _, row in df.iterrows()]
-            futures += [executor.submit(tools.copy_file, row['label_path'], label_dest_dir / f"{Path(row['label_path']).name}") for _, row in df.iterrows()]
-            
-            # Initialize progress bar
-            pbar = tqdm(total=len(futures), desc='Copying files')
-            for future in as_completed(futures):
-                # Update progress bar upon task completion
-                pbar.update(1)
-            pbar.close()
+    """
+    Copies image and label files listed in a DataFrame to specified directories using concurrent execution.
+
+    Parameters:
+        df (DataFrame): Contains columns 'image_path' and 'label name'.
+        img_dest_dir (str): Destination directory for copied image files.
+        label_dest_dir (str): Destination directory for copied label files.
+
+    The function uses a ThreadPoolExecutor to handle multiple copy operations simultaneously, 
+    enhancing efficiency especially for large datasets.
+    """
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Prepare futures for image and label copying
+        futures = [executor.submit(tools.copy_file, row['image_path'], img_dest_dir / f"{Path(row['image_path']).name}") for _, row in df.iterrows()]
+        futures += [executor.submit(tools.copy_file, row['label_path'], label_dest_dir / f"{Path(row['label_path']).name}") for _, row in df.iterrows()]
+        
+        # Initialize progress bar
+        pbar = tqdm(total=len(futures), desc='Copying files')
+        for future in as_completed(futures):
+            # Update progress bar upon task completion
+            pbar.update(1)
+        pbar.close()
 
 # creates subsets of main dataset
 def create_sub_dataset(dataset_dir, filtered_train_df, filtered_valid_df, class_names):
+    """
+    Sets up a sub-dataset within a specified directory by organizing and copying training and validation files 
+    according to the provided dataframes. This function also creates a YAML configuration for the sub-dataset.
+
+    Parameters:
+        dataset_dir (str): Base directory where the sub-dataset will be created.
+        filtered_train_df (DataFrame): DataFrame with paths to training images and labels.
+        filtered_valid_df (DataFrame): DataFrame with paths to validation images and labels.
+        class_names (list): List of class names corresponding to the dataset labels.
+
+    The function first clears any pre-existing data in the dataset directory, sets up the required directory structure,
+    copies the necessary files, and then writes a YAML configuration file reflecting the dataset structure.
+    """    
     
     dataset_dir = Path(dataset_dir)
     dataset_name = os.path.basename(dataset_dir)
@@ -110,7 +157,19 @@ def create_sub_dataset(dataset_dir, filtered_train_df, filtered_valid_df, class_
 
 # zoom into aircraft on every dataset image, including validation, so to so that the aircraft is classified
 def pre_process_dataset_for_classification(dataset_dir, zoom_factor):
-    
+    """
+    Processes image datasets for classification by applying a zoom operation to each image 
+    and handles the dataset organization for training, augmented training, and validation sets.
+
+    Parameters:
+        dataset_dir (str): The base directory of the dataset where images and labels are stored.
+        zoom_factor (float): The factor by which images will be zoomed.
+
+    This function iterates over specified subdirectories ('train', 'train-aug', 'valid'), 
+    applies a zoom augmentation to each image, and updates the dataset by saving the processed images and labels.
+    It uses concurrent processing to speed up the task and handles any exceptions that may occur during the process.
+    """
+
     for set_type in ['train', 'train-aug', 'valid']:
         image_dir = os.path.join(dataset_dir, 'images', set_type)
         label_dir = os.path.join(dataset_dir, 'labels', set_type)
@@ -140,6 +199,20 @@ def pre_process_dataset_for_classification(dataset_dir, zoom_factor):
 
 # Function to update the labels in a given directory
 def update_labels(dataset_dir, labels_path, label_mapping, type):
+    """
+    Updates the class indices in label files based on a provided mapping, for a specified dataset type.
+
+    Parameters:
+        dataset_dir (str): Directory containing the dataset.
+        labels_path (str): Path to the directory containing the label files.
+        label_mapping (dict): Dictionary mapping label filenames to new class indices.
+        type (str): The subset of the dataset being processed (e.g., 'train', 'valid').
+
+    This function iterates through each label file specified in the label mapping. 
+    If the label file exists, it reads and updates the class indices according to the mapping,
+    and then rewrites the modified labels back to the file.
+    """
+
     print(f'Processing {type} labels in {os.path.basename(dataset_dir)}:')
     for label_filename in tqdm(label_mapping, desc=f'Processing labels'):
         new_class_index = label_mapping[label_filename]
@@ -162,6 +235,20 @@ def update_labels(dataset_dir, labels_path, label_mapping, type):
 
 # corrects default YOLO labels to match class names for sub-dataset
 def correct_dataset_labels(dataset_dir, train_df, val_df, class_names):
+    """
+    Corrects the class indices in the dataset's label files for both training and validation sets according to specified class names.
+
+    Parameters:
+        dataset_dir (str): The root directory of the dataset containing label subdirectories.
+        train_df (DataFrame): DataFrame containing paths to training label files and their corresponding class annotations.
+        val_df (DataFrame): DataFrame containing paths to validation label files and their corresponding class annotations.
+        class_names (list of str): List of class names used to index class annotations.
+
+    This function maps the filenames to new class indices derived from the class names. It then updates the label files in 
+    both the training and validation directories to reflect these new indices.
+    """
+
+    
     # Assuming dataset_dir is the root that contains 'labels/train' and 'labels/valid'
     train_labels_path = dataset_dir + f'/labels/train'
     val_labels_path = dataset_dir + f'/labels/valid'
@@ -177,12 +264,17 @@ def correct_dataset_labels(dataset_dir, train_df, val_df, class_names):
     print("Label correction completed.")
 
 # creates augmented dataset structure
-def create_augmented_dataset_structure(original_dataset_path):
-    
+def create_augmented_dataset_structure(original_dataset_path):    
     """
-    Creates directory for augmented dataset:
-     - adds a train-aug to images and labels (as well as train)
-     - adds another yaml file with -aug appended which points to train-aug rather than train
+    Creates an augmented dataset structure by adding 'train-aug' directories for images and labels 
+    and updating the YAML configuration to point to these new directories.
+
+    Parameters:
+        original_dataset_path (str): The path to the root of the original dataset.
+
+    This function generates additional directories for storing augmented training data and 
+    creates a new YAML file to manage the dataset configuration. It ensures any existing augmented 
+    directories or configuration files are removed before creating new ones.
     """
 
     # Create train-aug paths
@@ -223,7 +315,16 @@ def create_augmented_dataset_structure(original_dataset_path):
 
 # copies all files to another directory using multithreading
 def copy_directory_contents_concurrently(src_dir, dst_dir):
-     
+    """
+    Copies all files from one directory to another using concurrent execution to speed up the process.
+
+    Parameters:
+        src_dir (str): The directory from which to copy files.
+        dst_dir (str): The target directory where files will be copied.
+
+    This function uses a ThreadPoolExecutor to perform the copying tasks concurrently, 
+    enhancing efficiency especially when dealing with large numbers of files.
+    """
     # Retrieve a list of source file paths
     src_files = [os.path.join(src_dir, file_name) for file_name in os.listdir(src_dir)]
     dst_files = [os.path.join(dst_dir, os.path.basename(file_path)) for file_path in src_files]
@@ -234,6 +335,18 @@ def copy_directory_contents_concurrently(src_dir, dst_dir):
 
 # Creates augmented dataset, using metadata dictionary to define augmentation methods
 def augment_dataset(original_dataset_path, augmentation_metadata):
+    """
+    Augments a dataset by copying the original files to new directories and applying specified augmentation methods.
+
+    Parameters:
+        original_dataset_path (str): Path to the root directory of the dataset.
+        augmentation_metadata (dict): Contains information about the augmentation methods to apply,
+                                    including method names and parameters.
+
+    This function first creates augmented dataset structures, then copies existing dataset files into these new directories.
+    It applies the augmentations defined in the metadata to a subset of the images, using concurrent processing for efficiency.
+    Each augmentation method can potentially modify both the images and their corresponding labels.
+    """
     
     # Reconstruct dataset with augmentation directories
     create_augmented_dataset_structure(original_dataset_path)
@@ -279,6 +392,17 @@ def augment_dataset(original_dataset_path, augmentation_metadata):
 
 # reorganizes dataset for keras         
 def reorganize_dataset_for_keras(dataset_dir):
+    """
+    Reorganizes a dataset into a structure compatible with Keras by sorting images into class-specific subdirectories.
+
+    Parameters:
+        dataset_dir (str): The root directory of the dataset which contains the images and labels.
+
+    This function loads class names from a YAML file, creates class-specific subdirectories under each image directory,
+    and moves images into these subdirectories based on their class ID obtained from the corresponding label files.
+    Designed to facilitate image classification tasks using Keras, this organization supports direct usage of Keras's
+    data loading utilities that expect data in such a structured format.
+    """
     
     # extract dataset name
     dataset_name = os.path.basename(dataset_dir)
@@ -322,6 +446,20 @@ def reorganize_dataset_for_keras(dataset_dir):
 
 # adds images to train set to make train and train-aug equal in size
 def append_new_train_images(dataset_dir, N, master_df, seed_time, class_names):
+    """
+    Appends a specified number of new training images and labels to an existing dataset directory from a master DataFrame.
+
+    Parameters:
+        dataset_dir (str): Path to the dataset directory.
+        N (int): Number of new images to add to the training set.
+        master_df (DataFrame): A DataFrame containing paths and metadata for potential training images.
+        seed_time (int): Seed for random operations to ensure reproducibility.
+        class_names (list of str): List of class names used to update labels based on classification.
+
+    This function filters out images already present in the dataset, samples new ones based on specified requirements,
+    and copies them to the dataset's training directories. It also updates the class indices in label files based on
+    newly added images. This is intended to augment the training data while maintaining class balance and diversity.
+    """    
     
     # image and label directories
     dataset_dir = Path(dataset_dir)

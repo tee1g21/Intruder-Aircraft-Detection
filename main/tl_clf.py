@@ -1,28 +1,59 @@
-"""Python file accompanying the tl_clf.ipynb notebook."""
+"""
+Training and evaluation script for a custom image classification model.
 
+This module defines the main training pipeline for a custom image classifier using TensorFlow and ClearML.
+It handles data loading, preprocessing, augmentation, model training, and evaluation, and logs metrics to ClearML.
+
+Functions:
+    main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size, w1, w2, new_image_count):
+        Main function to set up and run the training and evaluation pipeline for both pure and augmented datasets.
+
+Details:
+    The `main` function performs the following steps:
+    - Generates a seed for reproducibility.
+    - Loads the training and validation datasets and creates DataFrames.
+    - Filters data based on specified conditions (e.g., weather).
+    - Splits the data into training and validation sets using stratified sampling.
+    - Creates and augments the dataset.
+    - Preprocesses the dataset for classification.
+    - Organizes the dataset into a structure compatible with Keras.
+    - Loads the dataset using Keras' utility functions.
+    - Defines a Convolutional Neural Network (CNN) model for image classification.
+    - Trains the model on both the pure and augmented datasets.
+    - Evaluates the model, logs the metrics, and uploads them to ClearML.
+    - Uses TensorFlow's callback functions for real-time logging.
+
+Parameters:
+    RUN (int): The run number for this training session.
+    augmentation_metadata (dict): Metadata specifying the augmentation methods to apply.
+    task_name (str): Name of the task for logging.
+    sub_project (str): Sub-project name for organizing tasks.
+    epochs (int): Number of epochs to train the model.
+    train_size (int): Size of the training dataset.
+    w1 (str): First weather condition for filtering data.
+    w2 (str): Second weather condition for filtering data.
+    new_image_count (int): Number of new images to append to the training set.
+
+Returns:
+    None
+"""
 # Import modules
 import dataset as ds
 import config as cfg
 from evaluate import Evaluate
 import tools
 seed_const = 42
-
 from sklearn.model_selection import train_test_split
 import os
 import numpy as np
-
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Rescaling, Dropout
 from tensorflow.keras.metrics import Precision, Recall
-
 from clearml import Task
 import clearml
 clearml.browser_login()
-
 import argparse
-
-
 
 def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size, w1, w2, new_image_count):
 

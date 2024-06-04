@@ -1,4 +1,26 @@
-"""Python file containing augmentation methods to perform augmentation on individual images (and labels)"""
+"""
+This module provides a collection of image augmentation functions. The augmentations include 
+operations like flipping, rotating, adjusting brightness and contrast, applying Gaussian noise,
+histogram equalization, white balancing, sharpening, and zooming. 
+
+Functions:
+    flip(image_path, label_path, orientation, p=1.0): Applies a flip transformation.
+    rotate(image_path, label_path, angle_limit, p=1.0): Applies a rotation to the image.
+    brightness_and_contracy(image_path, alpha=1.0, beta=0): Modifies brightness and contrast.
+    gaussian_noise(image_path, var_limit=(10.0, 50.0)): Adds Gaussian noise to images.
+    hist_eq(image_path, p=1.0): Applies histogram equalization for contrast improvement.
+    white_balance(image_path): Adjusts image colors based on the Gray World assumption.
+    sharpen(image_path): Enhances image sharpness using a kernel-based approach.
+    zoom(image_path, label_path, zoom_factor=1): Zooms into the image focusing on central objects.
+    augment_image(image_path, images_aug_dir, label_path, labels_aug_dir, method_name, method_info):
+        General method to apply specified augmentations and save the outputs.
+
+Utilities:
+    - OpenCV: Used for image manipulation.
+    - Albumentations: Utilized for applying complex transformations.
+    - Numpy: Required for array operations.
+    
+"""
 
 import tools
 import cv2
@@ -10,6 +32,19 @@ import uuid
 
 # horizontal/vertical flip
 def flip(image_path, label_path, orientation, p=1.0):
+    """
+    Performs a horizontal or vertical flip transformation on an image based on the specified orientation, 
+    and accordingly updates the associated bounding box labels for object detection.
+
+    Parameters:
+        image_path (str): Path to the image file.
+        label_path (str): Path to the label file.
+        orientation (Jupyter Notebook (Python)): 'h' for horizontal, 'v' for vertical.
+        p (float): Probability of the flip.
+
+    Returns:
+        tuple: Augmented image and updated labels in the same format as input.
+    """    
     
     # Load image and labels
     image = cv2.imread(image_path)
@@ -41,8 +76,20 @@ def flip(image_path, label_path, orientation, p=1.0):
 
 # rotation with specified angle
 def rotate(image_path, label_path, angle_limit, p=1.0):
+    """Rotates an image within a specified angle range and updates its bounding box labels. 
+    The rotation is random within the specified limits and may be applied with a certain probability.
+
+    Parameters:
+        image_path (str): Path to the image file.
+        label_path (str): Path to the label file.
+        angle_limit (int): Maximum degree to rotate the image. Rotation will be between -angle_limit and +angle_limit.
+        p (float): Probability of applying the rotation.
+
+    Returns:
+        tuple: Augmented image and updated labels in YOLO format.
+    """   
    
-       # Load image and label
+    # Load image and label
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     bboxes, class_labels = tools.load_yolo_labels(label_path)
@@ -65,11 +112,19 @@ def rotate(image_path, label_path, angle_limit, p=1.0):
 # contrast and brightness
 def brightness_and_contrast(image_path, alpha=1.0, beta=0):
     """
-    Alpha - contrast control (1.0-3.0)
-    Beta - brightness control (-100 to 100)
-    """
+    Adjusts the brightness and contrast of an image using specified alpha and beta values. 
+    Alpha controls the contrast and can vary between 1.0 and 3.0. Beta adjusts the brightness and can range from -100 to 100.
 
-     # Load the image
+    Parameters:
+        image_path (str): Path to the image file.
+        alpha (float): Factor by which to scale the contrast (default 1.0).
+        beta (int): Value to adjust the brightness (default 0).
+
+    Returns:
+        numpy.ndarray: Image array with adjusted brightness and contrast.
+    """
+    
+    # Load the image
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
@@ -84,6 +139,17 @@ def brightness_and_contrast(image_path, alpha=1.0, beta=0):
 
 # histogram equalisation with CLAHE
 def hist_eq(image_path, p=1.0):
+    """
+    Applies histogram equalization to an image using CLAHE (Contrast Limited Adaptive Histogram Equalization)
+    to improve image contrast. This operation is applied with a specified probability.
+
+    Parameters:
+        image_path (str): Path to the image file.
+        p (float): Probability of applying the histogram equalization (default 1.0).
+
+    Returns:
+        numpy.ndarray: Image array with improved contrast.
+    """
     
     # Load the image
     image = cv2.imread(image_path)
@@ -102,6 +168,16 @@ def hist_eq(image_path, p=1.0):
 
 # white balancing - gray word algorithm
 def white_balance(image_path):
+    """
+    Applies white balance to an image using the Gray World assumption. 
+    This technique adjusts the colors of the image so that the average color is neutral gray.
+
+    Parameters:
+        image_path (str): Path to the image file.
+
+    Returns:
+        numpy.ndarray: Image array with applied white balance.
+    """   
   
     # Load the image
     image = cv2.imread(image_path)
@@ -125,6 +201,16 @@ def white_balance(image_path):
 
 # kernel sharpening
 def sharpen(image_path):
+    """
+    Applies a sharpening filter to an image to enhance its edges and details.
+
+    Parameters:
+        image_path (str): Path to the image file.
+
+    Returns:
+        numpy.ndarray: Image array with applied sharpening.
+    """
+    
     # Load the image
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -134,14 +220,6 @@ def sharpen(image_path):
                          [-1, 5, -1],
                          [0, -1, 0]], dtype=np.float32)
     
-    kernel_2 = np.array([[-1, -2, -1],
-                         [-2, 13, -2],
-                         [-1, -2, -1]], dtype=np.float32)
-
-    kernel_2 = np.array([[-1, -2, -1],
-                         [-2, 16, -2],
-                         [-1, -2, -1]], dtype=np.float32)
-    
     # Apply the sharpening kernel to the image
     sharpened_image = cv2.filter2D(image, -1, kernel_1)
     
@@ -149,6 +227,16 @@ def sharpen(image_path):
 
 # guassian noise
 def gaussian_noise(image_path, var_limit=(10.0, 50.0)):
+    """
+    Applies Gaussian noise to an image based on a specified variance range. 
+
+    Parameters:
+        image_path (str): Path to the image file.
+        var_limit (tuple): Minimum and maximum variance for the noise.
+
+    Returns:
+        numpy.ndarray: Image array with applied Gaussian noise.
+    """
    
     # Load the image
     image = cv2.imread(image_path)
@@ -168,7 +256,17 @@ def gaussian_noise(image_path, var_limit=(10.0, 50.0)):
 # zoom centred about object
 def zoom(image_path, label_path, zoom_factor=1):
     """
-    zoom factor: No zoom = 1, Full zoom (bounding box takes up entire picture) = 10
+    Applies a zoom operation on an image based on a specified zoom factor and updates the corresponding
+    bounding boxes. The function adjusts the view to focus on the primary object and resizes the crop to the original image size.
+
+    Parameters:
+        image_path (str): Path to the image file.
+        label_path (str): Path to the file containing YOLO formatted bounding box labels.
+        zoom_factor (int): Control for zoom intensity. 0 means no zoom, up to 10 for maximum zoom, 
+                           where the object takes up the entire image.
+
+    Returns:
+        tuple: Tuple containing the zoomed and resized image and the updated labels, both in their original dimensions and format.
     """
     # adjust zoom factor so that 1 = no zoom
     zoom_factor = zoom_factor / 10
@@ -211,36 +309,28 @@ def zoom(image_path, label_path, zoom_factor=1):
 
     return augmented_image, augmented_label
 
-# shift hue, saturation or value or HSV
-def hsv_shift(image_path, type, shift, p=1.0):
-    
-    # Load image
-    image = cv2.imread(image_path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert to RGB
-
-    # Prepare shift values based on the type
-    hue_shift = shift if type == 'h' else 0
-    sat_shift = shift if type == 's' else 0
-    val_shift = shift if type == 'v' else 0
-
-    # Define the augmentation pipeline
-    transform = A.Compose([
-        A.HueSaturationValue(
-            hue_shift_limit=(-hue_shift, hue_shift),  # Setting both limits to the same value for exact shift
-            sat_shift_limit=(-sat_shift, sat_shift),  
-            val_shift_limit=(-val_shift, val_shift),  
-            p=p
-        )
-    ])
-
-    # Apply the augmentation
-    transformed = transform(image=image)
-    augmented_image = transformed['image']
-    
-    return augmented_image
 
 # augments and saves individual image and label
 def augment_image(image_path, images_aug_dir, label_path, labels_aug_dir, method_name, method_info):
+    """
+    Applies a specified image augmentation method to an image and saves the augmented image and label. 
+    Handles various augmentation techniques such as flipping, rotating, adjusting brightness and contrast, 
+    adding noise, and more. Each method may adjust the image, label, or both, depending on its nature.
+
+    Parameters:
+        image_path (str): Path to the original image.
+        images_aug_dir (str): Directory path to save augmented images.
+        label_path (str): Path to the original label file.
+        labels_aug_dir (str): Directory path to save augmented labels.
+        method_name (str): Name of the augmentation method to apply.
+        method_info (dict): Contains parameters specific to the chosen augmentation method.
+
+    Raises:
+        ValueError: If the filenames of the image and label do not match.
+
+    Notes:
+        Augmentation methods that do not modify labels will simply copy the original label.
+    """    
     
     # raw name of image and label without file extension
     image_name, _ = os.path.splitext(os.path.basename(image_path))
@@ -281,9 +371,6 @@ def augment_image(image_path, images_aug_dir, label_path, labels_aug_dir, method
         augmented_label = open(label_path).read()  # No change to label for this augmentation
     elif method_name == 'zoom':
         augmented_image, augmented_label = zoom(image_path, label_path, **method_info['parameters'])
-    elif method_name == 'hsv':
-        augmented_image = hsv_shift(image_path, **method_info['parameters'])
-        augmented_label = open(label_path).read()  # No change to label for this augmentation
     
     # Save the augmented image and label
     tools.save_image(images_aug_dir + aug_image_filename, augmented_image)
