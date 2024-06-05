@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module augmenter</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">augmenter</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cgithub%5Cthird-year-project%5Cintruder-aircraft-detection%5Cmain%5Caugmenter.py">c:\github\third-year-project\intruder-aircraft-detection\main\augmenter.py</a></td></tr></table>
+    <p><span class="code">This&nbsp;module&nbsp;provides&nbsp;a&nbsp;collection&nbsp;of&nbsp;image&nbsp;augmentation&nbsp;functions.&nbsp;The&nbsp;augmentations&nbsp;include&nbsp;<br>
+operations&nbsp;like&nbsp;flipping,&nbsp;rotating,&nbsp;adjusting&nbsp;brightness&nbsp;and&nbsp;contrast,&nbsp;applying&nbsp;Gaussian&nbsp;noise,<br>
+histogram&nbsp;equalization,&nbsp;white&nbsp;balancing,&nbsp;sharpening,&nbsp;and&nbsp;zooming.&nbsp;<br>
+&nbsp;<br>
+Functions:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-flip">flip</a>(image_path,&nbsp;label_path,&nbsp;orientation,&nbsp;p=1.0):&nbsp;Applies&nbsp;a&nbsp;flip&nbsp;transformation.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-rotate">rotate</a>(image_path,&nbsp;label_path,&nbsp;angle_limit,&nbsp;p=1.0):&nbsp;Applies&nbsp;a&nbsp;rotation&nbsp;to&nbsp;the&nbsp;image.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-brightness_and_contrast">brightness_and_contrast</a>(image_path,&nbsp;alpha=1.0,&nbsp;beta=0):&nbsp;Modifies&nbsp;brightness&nbsp;and&nbsp;contrast.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-gaussian_noise">gaussian_noise</a>(image_path,&nbsp;var_limit=(10.0,&nbsp;50.0)):&nbsp;Adds&nbsp;Gaussian&nbsp;noise&nbsp;to&nbsp;images.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-hist_eq">hist_eq</a>(image_path,&nbsp;p=1.0):&nbsp;Applies&nbsp;histogram&nbsp;equalization&nbsp;for&nbsp;contrast&nbsp;improvement.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-white_balance">white_balance</a>(image_path):&nbsp;Adjusts&nbsp;image&nbsp;colors&nbsp;based&nbsp;on&nbsp;the&nbsp;Gray&nbsp;World&nbsp;assumption.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-sharpen">sharpen</a>(image_path):&nbsp;Enhances&nbsp;image&nbsp;sharpness&nbsp;using&nbsp;a&nbsp;kernel-based&nbsp;approach.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-zoom">zoom</a>(image_path,&nbsp;label_path,&nbsp;zoom_factor=1):&nbsp;Zooms&nbsp;into&nbsp;the&nbsp;image&nbsp;focusing&nbsp;on&nbsp;central&nbsp;objects.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-augment_image">augment_image</a>(image_path,&nbsp;images_aug_dir,&nbsp;label_path,&nbsp;labels_aug_dir,&nbsp;method_name,&nbsp;method_info):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;General&nbsp;method&nbsp;to&nbsp;apply&nbsp;specified&nbsp;augmentations&nbsp;and&nbsp;save&nbsp;the&nbsp;outputs.<br>
+&nbsp;<br>
+Utilities:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;OpenCV:&nbsp;Used&nbsp;for&nbsp;image&nbsp;manipulation.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Albumentations:&nbsp;Utilized&nbsp;for&nbsp;applying&nbsp;complex&nbsp;transformations.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Numpy:&nbsp;Required&nbsp;for&nbsp;array&nbsp;operations.</span></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="albumentations.html">albumentations</a><br>
+<a href="cv2.html">cv2</a><br>
+</td><td class="multicolumn"><a href="numpy.html">numpy</a><br>
+<a href="os.html">os</a><br>
+</td><td class="multicolumn"><a href="random.html">random</a><br>
+<a href="tools.html">tools</a><br>
+</td><td class="multicolumn"><a href="uuid.html">uuid</a><br>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-augment_image"><strong>augment_image</strong></a>(image_path, images_aug_dir, label_path, labels_aug_dir, method_name, method_info)</dt><dd><span class="code">Applies&nbsp;a&nbsp;specified&nbsp;image&nbsp;augmentation&nbsp;method&nbsp;to&nbsp;an&nbsp;image&nbsp;and&nbsp;saves&nbsp;the&nbsp;augmented&nbsp;image&nbsp;and&nbsp;label.&nbsp;<br>
+Handles&nbsp;various&nbsp;augmentation&nbsp;techniques&nbsp;such&nbsp;as&nbsp;flipping,&nbsp;rotating,&nbsp;adjusting&nbsp;brightness&nbsp;and&nbsp;contrast,&nbsp;<br>
+adding&nbsp;noise,&nbsp;and&nbsp;more.&nbsp;Each&nbsp;method&nbsp;may&nbsp;adjust&nbsp;the&nbsp;image,&nbsp;label,&nbsp;or&nbsp;both,&nbsp;depending&nbsp;on&nbsp;its&nbsp;nature.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;original&nbsp;image.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;images_aug_dir&nbsp;(str):&nbsp;Directory&nbsp;path&nbsp;to&nbsp;save&nbsp;augmented&nbsp;images.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;label_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;original&nbsp;label&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;labels_aug_dir&nbsp;(str):&nbsp;Directory&nbsp;path&nbsp;to&nbsp;save&nbsp;augmented&nbsp;labels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;method_name&nbsp;(str):&nbsp;Name&nbsp;of&nbsp;the&nbsp;augmentation&nbsp;method&nbsp;to&nbsp;apply.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;method_info&nbsp;(dict):&nbsp;Contains&nbsp;parameters&nbsp;specific&nbsp;to&nbsp;the&nbsp;chosen&nbsp;augmentation&nbsp;method.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ValueError:&nbsp;If&nbsp;the&nbsp;filenames&nbsp;of&nbsp;the&nbsp;image&nbsp;and&nbsp;label&nbsp;do&nbsp;not&nbsp;match.<br>
+&nbsp;<br>
+Notes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Augmentation&nbsp;methods&nbsp;that&nbsp;do&nbsp;not&nbsp;modify&nbsp;labels&nbsp;will&nbsp;simply&nbsp;copy&nbsp;the&nbsp;original&nbsp;label.</span></dd></dl>
+ <dl><dt><a name="-brightness_and_contrast"><strong>brightness_and_contrast</strong></a>(image_path, alpha=1.0, beta=0)</dt><dd><span class="code">Adjusts&nbsp;the&nbsp;brightness&nbsp;and&nbsp;contrast&nbsp;of&nbsp;an&nbsp;image&nbsp;using&nbsp;specified&nbsp;alpha&nbsp;and&nbsp;beta&nbsp;values.&nbsp;<br>
+Alpha&nbsp;controls&nbsp;the&nbsp;contrast&nbsp;and&nbsp;can&nbsp;vary&nbsp;between&nbsp;1.0&nbsp;and&nbsp;3.0.&nbsp;Beta&nbsp;adjusts&nbsp;the&nbsp;brightness&nbsp;and&nbsp;can&nbsp;range&nbsp;from&nbsp;-100&nbsp;to&nbsp;100.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;image&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alpha&nbsp;(float):&nbsp;Factor&nbsp;by&nbsp;which&nbsp;to&nbsp;scale&nbsp;the&nbsp;contrast&nbsp;(default&nbsp;1.0).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;beta&nbsp;(int):&nbsp;Value&nbsp;to&nbsp;adjust&nbsp;the&nbsp;brightness&nbsp;(default&nbsp;0).<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numpy.ndarray:&nbsp;Image&nbsp;array&nbsp;with&nbsp;adjusted&nbsp;brightness&nbsp;and&nbsp;contrast.</span></dd></dl>
+ <dl><dt><a name="-flip"><strong>flip</strong></a>(image_path, label_path, orientation, p=1.0)</dt><dd><span class="code">Performs&nbsp;a&nbsp;horizontal&nbsp;or&nbsp;vertical&nbsp;flip&nbsp;transformation&nbsp;on&nbsp;an&nbsp;image&nbsp;based&nbsp;on&nbsp;the&nbsp;specified&nbsp;orientation,&nbsp;<br>
+and&nbsp;accordingly&nbsp;updates&nbsp;the&nbsp;associated&nbsp;bounding&nbsp;box&nbsp;labels&nbsp;for&nbsp;object&nbsp;detection.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;image&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;label_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;label&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;orientation&nbsp;(Jupyter&nbsp;Notebook&nbsp;(Python)):&nbsp;'h'&nbsp;for&nbsp;horizontal,&nbsp;'v'&nbsp;for&nbsp;vertical.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;(float):&nbsp;Probability&nbsp;of&nbsp;the&nbsp;flip.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;Augmented&nbsp;image&nbsp;and&nbsp;updated&nbsp;labels&nbsp;in&nbsp;the&nbsp;same&nbsp;format&nbsp;as&nbsp;input.</span></dd></dl>
+ <dl><dt><a name="-gaussian_noise"><strong>gaussian_noise</strong></a>(image_path, var_limit=(10.0, 50.0))</dt><dd><span class="code">Applies&nbsp;Gaussian&nbsp;noise&nbsp;to&nbsp;an&nbsp;image&nbsp;based&nbsp;on&nbsp;a&nbsp;specified&nbsp;variance&nbsp;range.&nbsp;<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;image&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;var_limit&nbsp;(tuple):&nbsp;Minimum&nbsp;and&nbsp;maximum&nbsp;variance&nbsp;for&nbsp;the&nbsp;noise.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numpy.ndarray:&nbsp;Image&nbsp;array&nbsp;with&nbsp;applied&nbsp;Gaussian&nbsp;noise.</span></dd></dl>
+ <dl><dt><a name="-hist_eq"><strong>hist_eq</strong></a>(image_path, p=1.0)</dt><dd><span class="code">Applies&nbsp;histogram&nbsp;equalization&nbsp;to&nbsp;an&nbsp;image&nbsp;using&nbsp;CLAHE&nbsp;(Contrast&nbsp;Limited&nbsp;Adaptive&nbsp;Histogram&nbsp;Equalization)<br>
+to&nbsp;improve&nbsp;image&nbsp;contrast.&nbsp;This&nbsp;operation&nbsp;is&nbsp;applied&nbsp;with&nbsp;a&nbsp;specified&nbsp;probability.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;image&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;(float):&nbsp;Probability&nbsp;of&nbsp;applying&nbsp;the&nbsp;histogram&nbsp;equalization&nbsp;(default&nbsp;1.0).<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numpy.ndarray:&nbsp;Image&nbsp;array&nbsp;with&nbsp;improved&nbsp;contrast.</span></dd></dl>
+ <dl><dt><a name="-rotate"><strong>rotate</strong></a>(image_path, label_path, angle_limit, p=1.0)</dt><dd><span class="code">Rotates&nbsp;an&nbsp;image&nbsp;within&nbsp;a&nbsp;specified&nbsp;angle&nbsp;range&nbsp;and&nbsp;updates&nbsp;its&nbsp;bounding&nbsp;box&nbsp;labels.&nbsp;<br>
+The&nbsp;rotation&nbsp;is&nbsp;random&nbsp;within&nbsp;the&nbsp;specified&nbsp;limits&nbsp;and&nbsp;may&nbsp;be&nbsp;applied&nbsp;with&nbsp;a&nbsp;certain&nbsp;probability.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;image&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;label_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;label&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;angle_limit&nbsp;(int):&nbsp;Maximum&nbsp;degree&nbsp;to&nbsp;rotate&nbsp;the&nbsp;image.&nbsp;Rotation&nbsp;will&nbsp;be&nbsp;between&nbsp;-angle_limit&nbsp;and&nbsp;+angle_limit.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;(float):&nbsp;Probability&nbsp;of&nbsp;applying&nbsp;the&nbsp;rotation.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;Augmented&nbsp;image&nbsp;and&nbsp;updated&nbsp;labels&nbsp;in&nbsp;YOLO&nbsp;format.</span></dd></dl>
+ <dl><dt><a name="-sharpen"><strong>sharpen</strong></a>(image_path)</dt><dd><span class="code">Applies&nbsp;a&nbsp;sharpening&nbsp;filter&nbsp;to&nbsp;an&nbsp;image&nbsp;to&nbsp;enhance&nbsp;its&nbsp;edges&nbsp;and&nbsp;details.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;image&nbsp;file.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numpy.ndarray:&nbsp;Image&nbsp;array&nbsp;with&nbsp;applied&nbsp;sharpening.</span></dd></dl>
+ <dl><dt><a name="-white_balance"><strong>white_balance</strong></a>(image_path)</dt><dd><span class="code">Applies&nbsp;white&nbsp;balance&nbsp;to&nbsp;an&nbsp;image&nbsp;using&nbsp;the&nbsp;Gray&nbsp;World&nbsp;assumption.&nbsp;<br>
+This&nbsp;technique&nbsp;adjusts&nbsp;the&nbsp;colors&nbsp;of&nbsp;the&nbsp;image&nbsp;so&nbsp;that&nbsp;the&nbsp;average&nbsp;color&nbsp;is&nbsp;neutral&nbsp;gray.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;image&nbsp;file.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numpy.ndarray:&nbsp;Image&nbsp;array&nbsp;with&nbsp;applied&nbsp;white&nbsp;balance.</span></dd></dl>
+ <dl><dt><a name="-zoom"><strong>zoom</strong></a>(image_path, label_path, zoom_factor=1)</dt><dd><span class="code">Applies&nbsp;a&nbsp;zoom&nbsp;operation&nbsp;on&nbsp;an&nbsp;image&nbsp;based&nbsp;on&nbsp;a&nbsp;specified&nbsp;zoom&nbsp;factor&nbsp;and&nbsp;updates&nbsp;the&nbsp;corresponding<br>
+bounding&nbsp;boxes.&nbsp;The&nbsp;function&nbsp;adjusts&nbsp;the&nbsp;view&nbsp;to&nbsp;focus&nbsp;on&nbsp;the&nbsp;primary&nbsp;object&nbsp;and&nbsp;resizes&nbsp;the&nbsp;crop&nbsp;to&nbsp;the&nbsp;original&nbsp;image&nbsp;size.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;image&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;label_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;file&nbsp;containing&nbsp;YOLO&nbsp;formatted&nbsp;bounding&nbsp;box&nbsp;labels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;zoom_factor&nbsp;(int):&nbsp;Control&nbsp;for&nbsp;zoom&nbsp;intensity.&nbsp;0&nbsp;means&nbsp;no&nbsp;zoom,&nbsp;up&nbsp;to&nbsp;10&nbsp;for&nbsp;maximum&nbsp;zoom,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;the&nbsp;object&nbsp;takes&nbsp;up&nbsp;the&nbsp;entire&nbsp;image.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;Tuple&nbsp;containing&nbsp;the&nbsp;zoomed&nbsp;and&nbsp;resized&nbsp;image&nbsp;and&nbsp;the&nbsp;updated&nbsp;labels,&nbsp;both&nbsp;in&nbsp;their&nbsp;original&nbsp;dimensions&nbsp;and&nbsp;format.</span></dd></dl>
+</td></tr></table>
+</body></html>

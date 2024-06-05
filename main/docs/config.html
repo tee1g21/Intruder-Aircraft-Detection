@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module config</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">config</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cgithub%5Cthird-year-project%5Cintruder-aircraft-detection%5Cmain%5Cconfig.py">c:\github\third-year-project\intruder-aircraft-detection\main\config.py</a></td></tr></table>
+    <p><span class="code">Configuration&nbsp;for&nbsp;the&nbsp;Intruder-Aircraft-Detection&nbsp;project.<br>
+&nbsp;<br>
+This&nbsp;configuration&nbsp;file&nbsp;defines&nbsp;paths&nbsp;and&nbsp;project-specific&nbsp;settings&nbsp;used&nbsp;across&nbsp;various&nbsp;parts&nbsp;of&nbsp;the&nbsp;project,&nbsp;<br>
+including&nbsp;the&nbsp;dataset&nbsp;and&nbsp;logging&nbsp;directories&nbsp;for&nbsp;YOLO&nbsp;and&nbsp;custom&nbsp;classifier&nbsp;implementations.<br>
+&nbsp;<br>
+Global&nbsp;Settings:<br>
+-&nbsp;ROOT:&nbsp;The&nbsp;root&nbsp;directory&nbsp;of&nbsp;the&nbsp;project.&nbsp;Needed&nbsp;as&nbsp;relative&nbsp;paths&nbsp;must&nbsp;be&nbsp;absolute&nbsp;<br>
+-&nbsp;BASE_DATASET:&nbsp;The&nbsp;base&nbsp;directory&nbsp;where&nbsp;the&nbsp;AVOIDDS&nbsp;dataset&nbsp;is&nbsp;located.<br>
+-&nbsp;PROJECT_NAME:&nbsp;The&nbsp;general&nbsp;name&nbsp;of&nbsp;the&nbsp;project&nbsp;for&nbsp;ClearML.<br>
+&nbsp;<br>
+YOLO-specific&nbsp;settings:<br>
+-&nbsp;YOLO_DATASET_DIR:&nbsp;Directory&nbsp;for&nbsp;the&nbsp;YOLO&nbsp;formatted&nbsp;dataset.<br>
+-&nbsp;YOLO_PROJECT_DIR:&nbsp;Directory&nbsp;for&nbsp;logs&nbsp;and&nbsp;output&nbsp;related&nbsp;to&nbsp;the&nbsp;YOLO&nbsp;model&nbsp;training.<br>
+-&nbsp;YOLO_PROJECT_NAME:&nbsp;Name&nbsp;of&nbsp;the&nbsp;YOLO&nbsp;project&nbsp;within&nbsp;the&nbsp;main&nbsp;project,&nbsp;for&nbsp;ClearML.<br>
+-&nbsp;YOLO_CLASS_NAMES:&nbsp;List&nbsp;of&nbsp;class&nbsp;names&nbsp;specific&nbsp;to&nbsp;the&nbsp;YOLO&nbsp;model&nbsp;training.<br>
+&nbsp;<br>
+Custom&nbsp;classifier&nbsp;settings:<br>
+-&nbsp;CLF_DATASET_DIR:&nbsp;Directory&nbsp;for&nbsp;the&nbsp;dataset&nbsp;formatted&nbsp;for&nbsp;use&nbsp;with&nbsp;a&nbsp;custom&nbsp;classifier.<br>
+-&nbsp;CLF_PROJECT_DIR:&nbsp;Directory&nbsp;for&nbsp;logs&nbsp;and&nbsp;output&nbsp;related&nbsp;to&nbsp;the&nbsp;custom&nbsp;classifier&nbsp;training.<br>
+-&nbsp;CLF_CLASS_NAMES:&nbsp;List&nbsp;of&nbsp;class&nbsp;names&nbsp;specific&nbsp;to&nbsp;the&nbsp;custom&nbsp;classifier&nbsp;training.<br>
+-&nbsp;CLF_PROJECT_NAME:&nbsp;Name&nbsp;of&nbsp;the&nbsp;custom&nbsp;classifier&nbsp;project&nbsp;within&nbsp;the&nbsp;main&nbsp;project,&nbsp;for&nbsp;ClearML.</span></p>
+<p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>BASE_DATASET</strong> = '../datasets/AVOIDDS'<br>
+<strong>CLF_CLASS_NAMES</strong> = ['Cessna Skyhawk', 'Boeing 737-800', 'King Air C90']<br>
+<strong>CLF_DATASET_DIR</strong> = '../datasets/Custom'<br>
+<strong>CLF_PROJECT_DIR</strong> = '../logs/Custom'<br>
+<strong>CLF_PROJECT_NAME</strong> = 'Intruder-Aircraft-Detection/tl_clf'<br>
+<strong>PROJECT_NAME</strong> = 'Intruder-Aircraft-Detection'<br>
+<strong>ROOT</strong> = '..'<br>
+<strong>YOLO_CLASS_NAMES</strong> = ['Cessna Skyhawk', 'Boeing 737-800', 'King Air C90']<br>
+<strong>YOLO_DATASET_DIR</strong> = '../datasets/YOLOv8'<br>
+<strong>YOLO_PROJECT_DIR</strong> = '../logs/YOLOv8'<br>
+<strong>YOLO_PROJECT_NAME</strong> = 'Intruder-Aircraft-Detection/YOLOv8'</td></tr></table>
+</body></html>

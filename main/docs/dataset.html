@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module dataset</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">dataset</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cgithub%5Cthird-year-project%5Cintruder-aircraft-detection%5Cmain%5Cdataset.py">c:\github\third-year-project\intruder-aircraft-detection\main\dataset.py</a></td></tr></table>
+    <p><span class="code">This&nbsp;dataset&nbsp;module&nbsp;provides&nbsp;comprehensive&nbsp;tools&nbsp;for&nbsp;managing,&nbsp;augmenting,&nbsp;and&nbsp;organizing&nbsp;datasets.&nbsp;It&nbsp;includes&nbsp;functions&nbsp;to&nbsp;create&nbsp;data&nbsp;frames,<br>
+copy&nbsp;files&nbsp;concurrently,&nbsp;augment&nbsp;datasets,&nbsp;and&nbsp;reorganize&nbsp;them&nbsp;for&nbsp;compatibility&nbsp;with&nbsp;frameworks&nbsp;like&nbsp;Keras.<br>
+&nbsp;<br>
+Key&nbsp;Functions:<br>
+-&nbsp;create_dataframe:&nbsp;Creates&nbsp;a&nbsp;DataFrame&nbsp;from&nbsp;image&nbsp;and&nbsp;label&nbsp;paths,&nbsp;integrating&nbsp;metadata&nbsp;for&nbsp;comprehensive&nbsp;dataset&nbsp;management.<br>
+-&nbsp;copy_dataframe_files_concurrently:&nbsp;Copies&nbsp;image&nbsp;and&nbsp;label&nbsp;files&nbsp;listed&nbsp;in&nbsp;a&nbsp;DataFrame&nbsp;to&nbsp;specified&nbsp;directories&nbsp;using&nbsp;concurrent&nbsp;execution.<br>
+-&nbsp;create_sub_dataset:&nbsp;Establishes&nbsp;a&nbsp;structured&nbsp;sub-dataset&nbsp;within&nbsp;a&nbsp;specified&nbsp;directory&nbsp;for&nbsp;targeted&nbsp;analysis&nbsp;or&nbsp;processing.<br>
+-&nbsp;augment_dataset:&nbsp;Augments&nbsp;a&nbsp;dataset&nbsp;by&nbsp;applying&nbsp;specified&nbsp;methods,&nbsp;enhancing&nbsp;data&nbsp;variability&nbsp;and&nbsp;robustness&nbsp;for&nbsp;training&nbsp;models.<br>
+-&nbsp;reorganize_dataset_for_keras:&nbsp;Organizes&nbsp;a&nbsp;dataset&nbsp;into&nbsp;class-specific&nbsp;subdirectories&nbsp;suitable&nbsp;for&nbsp;Keras'&nbsp;data&nbsp;loading&nbsp;utilities.<br>
+-&nbsp;append_new_train_images:&nbsp;Expands&nbsp;an&nbsp;existing&nbsp;dataset&nbsp;with&nbsp;additional&nbsp;training&nbsp;images&nbsp;to&nbsp;ensure&nbsp;diverse&nbsp;and&nbsp;balanced&nbsp;data.</span></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="augmenter.html">augmenter</a><br>
+<a href="cv2.html">cv2</a><br>
+</td><td class="multicolumn"><a href="json.html">json</a><br>
+<a href="os.html">os</a><br>
+</td><td class="multicolumn"><a href="pandas.html">pandas</a><br>
+<a href="random.html">random</a><br>
+</td><td class="multicolumn"><a href="tools.html">tools</a><br>
+<a href="yaml.html">yaml</a><br>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-append_new_train_images"><strong>append_new_train_images</strong></a>(dataset_dir, N, master_df, seed_time, class_names)</dt><dd><span class="code">Appends&nbsp;a&nbsp;specified&nbsp;number&nbsp;of&nbsp;new&nbsp;training&nbsp;images&nbsp;and&nbsp;labels&nbsp;to&nbsp;an&nbsp;existing&nbsp;dataset&nbsp;directory&nbsp;from&nbsp;a&nbsp;master&nbsp;DataFrame.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_dir&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;dataset&nbsp;directory.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;N&nbsp;(int):&nbsp;Number&nbsp;of&nbsp;new&nbsp;images&nbsp;to&nbsp;add&nbsp;to&nbsp;the&nbsp;training&nbsp;set.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;master_df&nbsp;(DataFrame):&nbsp;A&nbsp;DataFrame&nbsp;containing&nbsp;paths&nbsp;and&nbsp;metadata&nbsp;for&nbsp;potential&nbsp;training&nbsp;images.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;seed_time&nbsp;(int):&nbsp;Seed&nbsp;for&nbsp;random&nbsp;operations&nbsp;to&nbsp;ensure&nbsp;reproducibility.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class_names&nbsp;(list&nbsp;of&nbsp;str):&nbsp;List&nbsp;of&nbsp;class&nbsp;names&nbsp;used&nbsp;to&nbsp;update&nbsp;labels&nbsp;based&nbsp;on&nbsp;classification.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;filters&nbsp;out&nbsp;images&nbsp;already&nbsp;present&nbsp;in&nbsp;the&nbsp;dataset,&nbsp;samples&nbsp;new&nbsp;ones&nbsp;based&nbsp;on&nbsp;specified&nbsp;requirements,<br>
+and&nbsp;copies&nbsp;them&nbsp;to&nbsp;the&nbsp;dataset's&nbsp;training&nbsp;directories.&nbsp;It&nbsp;also&nbsp;updates&nbsp;the&nbsp;class&nbsp;indices&nbsp;in&nbsp;label&nbsp;files&nbsp;based&nbsp;on<br>
+newly&nbsp;added&nbsp;images.&nbsp;This&nbsp;is&nbsp;intended&nbsp;to&nbsp;augment&nbsp;the&nbsp;training&nbsp;data&nbsp;while&nbsp;maintaining&nbsp;class&nbsp;balance&nbsp;and&nbsp;diversity.</span></dd></dl>
+ <dl><dt><a name="-augment_dataset"><strong>augment_dataset</strong></a>(original_dataset_path, augmentation_metadata)</dt><dd><span class="code">Augments&nbsp;a&nbsp;dataset&nbsp;by&nbsp;copying&nbsp;the&nbsp;original&nbsp;files&nbsp;to&nbsp;new&nbsp;directories&nbsp;and&nbsp;applying&nbsp;specified&nbsp;augmentation&nbsp;methods.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;original_dataset_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;root&nbsp;directory&nbsp;of&nbsp;the&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;augmentation_metadata&nbsp;(dict):&nbsp;Contains&nbsp;information&nbsp;about&nbsp;the&nbsp;augmentation&nbsp;methods&nbsp;to&nbsp;apply,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;including&nbsp;method&nbsp;names&nbsp;and&nbsp;parameters.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;first&nbsp;creates&nbsp;augmented&nbsp;dataset&nbsp;structures,&nbsp;then&nbsp;copies&nbsp;existing&nbsp;dataset&nbsp;files&nbsp;into&nbsp;these&nbsp;new&nbsp;directories.<br>
+It&nbsp;applies&nbsp;the&nbsp;augmentations&nbsp;defined&nbsp;in&nbsp;the&nbsp;metadata&nbsp;to&nbsp;a&nbsp;subset&nbsp;of&nbsp;the&nbsp;images,&nbsp;using&nbsp;concurrent&nbsp;processing&nbsp;for&nbsp;efficiency.<br>
+Each&nbsp;augmentation&nbsp;method&nbsp;can&nbsp;potentially&nbsp;modify&nbsp;both&nbsp;the&nbsp;images&nbsp;and&nbsp;their&nbsp;corresponding&nbsp;labels.</span></dd></dl>
+ <dl><dt><a name="-copy_dataframe_files_concurrently"><strong>copy_dataframe_files_concurrently</strong></a>(df, img_dest_dir, label_dest_dir)</dt><dd><span class="code">Copies&nbsp;image&nbsp;and&nbsp;label&nbsp;files&nbsp;listed&nbsp;in&nbsp;a&nbsp;DataFrame&nbsp;to&nbsp;specified&nbsp;directories&nbsp;using&nbsp;concurrent&nbsp;execution.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;df&nbsp;(DataFrame):&nbsp;Contains&nbsp;columns&nbsp;'image_path'&nbsp;and&nbsp;'label&nbsp;name'.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;img_dest_dir&nbsp;(str):&nbsp;Destination&nbsp;directory&nbsp;for&nbsp;copied&nbsp;image&nbsp;files.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;label_dest_dir&nbsp;(str):&nbsp;Destination&nbsp;directory&nbsp;for&nbsp;copied&nbsp;label&nbsp;files.<br>
+&nbsp;<br>
+The&nbsp;function&nbsp;uses&nbsp;a&nbsp;ThreadPoolExecutor&nbsp;to&nbsp;handle&nbsp;multiple&nbsp;copy&nbsp;operations&nbsp;simultaneously,&nbsp;<br>
+enhancing&nbsp;efficiency&nbsp;especially&nbsp;for&nbsp;large&nbsp;datasets.</span></dd></dl>
+ <dl><dt><a name="-copy_directory_contents_concurrently"><strong>copy_directory_contents_concurrently</strong></a>(src_dir, dst_dir)</dt><dd><span class="code">Copies&nbsp;all&nbsp;files&nbsp;from&nbsp;one&nbsp;directory&nbsp;to&nbsp;another&nbsp;using&nbsp;concurrent&nbsp;execution&nbsp;to&nbsp;speed&nbsp;up&nbsp;the&nbsp;process.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;src_dir&nbsp;(str):&nbsp;The&nbsp;directory&nbsp;from&nbsp;which&nbsp;to&nbsp;copy&nbsp;files.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dst_dir&nbsp;(str):&nbsp;The&nbsp;target&nbsp;directory&nbsp;where&nbsp;files&nbsp;will&nbsp;be&nbsp;copied.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;uses&nbsp;a&nbsp;ThreadPoolExecutor&nbsp;to&nbsp;perform&nbsp;the&nbsp;copying&nbsp;tasks&nbsp;concurrently,&nbsp;<br>
+enhancing&nbsp;efficiency&nbsp;especially&nbsp;when&nbsp;dealing&nbsp;with&nbsp;large&nbsp;numbers&nbsp;of&nbsp;files.</span></dd></dl>
+ <dl><dt><a name="-correct_dataset_labels"><strong>correct_dataset_labels</strong></a>(dataset_dir, train_df, val_df, class_names)</dt><dd><span class="code">Corrects&nbsp;the&nbsp;class&nbsp;indices&nbsp;in&nbsp;the&nbsp;dataset's&nbsp;label&nbsp;files&nbsp;for&nbsp;both&nbsp;training&nbsp;and&nbsp;validation&nbsp;sets&nbsp;according&nbsp;to&nbsp;specified&nbsp;class&nbsp;names.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_dir&nbsp;(str):&nbsp;The&nbsp;root&nbsp;directory&nbsp;of&nbsp;the&nbsp;dataset&nbsp;containing&nbsp;label&nbsp;subdirectories.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;train_df&nbsp;(DataFrame):&nbsp;DataFrame&nbsp;containing&nbsp;paths&nbsp;to&nbsp;training&nbsp;label&nbsp;files&nbsp;and&nbsp;their&nbsp;corresponding&nbsp;class&nbsp;annotations.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;val_df&nbsp;(DataFrame):&nbsp;DataFrame&nbsp;containing&nbsp;paths&nbsp;to&nbsp;validation&nbsp;label&nbsp;files&nbsp;and&nbsp;their&nbsp;corresponding&nbsp;class&nbsp;annotations.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class_names&nbsp;(list&nbsp;of&nbsp;str):&nbsp;List&nbsp;of&nbsp;class&nbsp;names&nbsp;used&nbsp;to&nbsp;index&nbsp;class&nbsp;annotations.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;maps&nbsp;the&nbsp;filenames&nbsp;to&nbsp;new&nbsp;class&nbsp;indices&nbsp;derived&nbsp;from&nbsp;the&nbsp;class&nbsp;names.&nbsp;It&nbsp;then&nbsp;updates&nbsp;the&nbsp;label&nbsp;files&nbsp;in&nbsp;<br>
+both&nbsp;the&nbsp;training&nbsp;and&nbsp;validation&nbsp;directories&nbsp;to&nbsp;reflect&nbsp;these&nbsp;new&nbsp;indices.</span></dd></dl>
+ <dl><dt><a name="-create_augmented_dataset_structure"><strong>create_augmented_dataset_structure</strong></a>(original_dataset_path)</dt><dd><span class="code">Creates&nbsp;an&nbsp;augmented&nbsp;dataset&nbsp;structure&nbsp;by&nbsp;adding&nbsp;'train-aug'&nbsp;directories&nbsp;for&nbsp;images&nbsp;and&nbsp;labels&nbsp;<br>
+and&nbsp;updating&nbsp;the&nbsp;YAML&nbsp;configuration&nbsp;to&nbsp;point&nbsp;to&nbsp;these&nbsp;new&nbsp;directories.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;original_dataset_path&nbsp;(str):&nbsp;The&nbsp;path&nbsp;to&nbsp;the&nbsp;root&nbsp;of&nbsp;the&nbsp;original&nbsp;dataset.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;generates&nbsp;additional&nbsp;directories&nbsp;for&nbsp;storing&nbsp;augmented&nbsp;training&nbsp;data&nbsp;and&nbsp;<br>
+creates&nbsp;a&nbsp;new&nbsp;YAML&nbsp;file&nbsp;to&nbsp;manage&nbsp;the&nbsp;dataset&nbsp;configuration.&nbsp;It&nbsp;ensures&nbsp;any&nbsp;existing&nbsp;augmented&nbsp;<br>
+directories&nbsp;or&nbsp;configuration&nbsp;files&nbsp;are&nbsp;removed&nbsp;before&nbsp;creating&nbsp;new&nbsp;ones.</span></dd></dl>
+ <dl><dt><a name="-create_dataframe"><strong>create_dataframe</strong></a>(images_path, labels_path, metadata_path)</dt><dd><span class="code">Loads&nbsp;image&nbsp;and&nbsp;label&nbsp;paths&nbsp;and&nbsp;their&nbsp;corresponding&nbsp;metadata&nbsp;into&nbsp;a&nbsp;DataFrame.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;images_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;directory&nbsp;of&nbsp;image&nbsp;files.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;labels_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;directory&nbsp;of&nbsp;label&nbsp;files.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metadata_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;metadata&nbsp;JSON&nbsp;file.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;DataFrame:&nbsp;DataFrame&nbsp;combining&nbsp;image&nbsp;and&nbsp;label&nbsp;paths&nbsp;with&nbsp;expanded&nbsp;metadata.</span></dd></dl>
+ <dl><dt><a name="-create_sub_dataset"><strong>create_sub_dataset</strong></a>(dataset_dir, filtered_train_df, filtered_valid_df, class_names)</dt><dd><span class="code">Sets&nbsp;up&nbsp;a&nbsp;sub-dataset&nbsp;within&nbsp;a&nbsp;specified&nbsp;directory&nbsp;by&nbsp;organizing&nbsp;and&nbsp;copying&nbsp;training&nbsp;and&nbsp;validation&nbsp;files&nbsp;<br>
+according&nbsp;to&nbsp;the&nbsp;provided&nbsp;dataframes.&nbsp;This&nbsp;function&nbsp;also&nbsp;creates&nbsp;a&nbsp;YAML&nbsp;configuration&nbsp;for&nbsp;the&nbsp;sub-dataset.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_dir&nbsp;(str):&nbsp;Base&nbsp;directory&nbsp;where&nbsp;the&nbsp;sub-dataset&nbsp;will&nbsp;be&nbsp;created.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;filtered_train_df&nbsp;(DataFrame):&nbsp;DataFrame&nbsp;with&nbsp;paths&nbsp;to&nbsp;training&nbsp;images&nbsp;and&nbsp;labels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;filtered_valid_df&nbsp;(DataFrame):&nbsp;DataFrame&nbsp;with&nbsp;paths&nbsp;to&nbsp;validation&nbsp;images&nbsp;and&nbsp;labels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class_names&nbsp;(list):&nbsp;List&nbsp;of&nbsp;class&nbsp;names&nbsp;corresponding&nbsp;to&nbsp;the&nbsp;dataset&nbsp;labels.<br>
+&nbsp;<br>
+The&nbsp;function&nbsp;first&nbsp;clears&nbsp;any&nbsp;pre-existing&nbsp;data&nbsp;in&nbsp;the&nbsp;dataset&nbsp;directory,&nbsp;sets&nbsp;up&nbsp;the&nbsp;required&nbsp;directory&nbsp;structure,<br>
+copies&nbsp;the&nbsp;necessary&nbsp;files,&nbsp;and&nbsp;then&nbsp;writes&nbsp;a&nbsp;YAML&nbsp;configuration&nbsp;file&nbsp;reflecting&nbsp;the&nbsp;dataset&nbsp;structure.</span></dd></dl>
+ <dl><dt><a name="-pre_process_dataset_for_classification"><strong>pre_process_dataset_for_classification</strong></a>(dataset_dir, zoom_factor)</dt><dd><span class="code">Processes&nbsp;image&nbsp;datasets&nbsp;for&nbsp;classification&nbsp;by&nbsp;applying&nbsp;a&nbsp;zoom&nbsp;operation&nbsp;to&nbsp;each&nbsp;image&nbsp;<br>
+and&nbsp;handles&nbsp;the&nbsp;dataset&nbsp;organization&nbsp;for&nbsp;training,&nbsp;augmented&nbsp;training,&nbsp;and&nbsp;validation&nbsp;sets.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_dir&nbsp;(str):&nbsp;The&nbsp;base&nbsp;directory&nbsp;of&nbsp;the&nbsp;dataset&nbsp;where&nbsp;images&nbsp;and&nbsp;labels&nbsp;are&nbsp;stored.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;zoom_factor&nbsp;(float):&nbsp;The&nbsp;factor&nbsp;by&nbsp;which&nbsp;images&nbsp;will&nbsp;be&nbsp;zoomed.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;iterates&nbsp;over&nbsp;specified&nbsp;subdirectories&nbsp;('train',&nbsp;'train-aug',&nbsp;'valid'),&nbsp;<br>
+applies&nbsp;a&nbsp;zoom&nbsp;augmentation&nbsp;to&nbsp;each&nbsp;image,&nbsp;and&nbsp;updates&nbsp;the&nbsp;dataset&nbsp;by&nbsp;saving&nbsp;the&nbsp;processed&nbsp;images&nbsp;and&nbsp;labels.<br>
+It&nbsp;uses&nbsp;concurrent&nbsp;processing&nbsp;to&nbsp;speed&nbsp;up&nbsp;the&nbsp;task&nbsp;and&nbsp;handles&nbsp;any&nbsp;exceptions&nbsp;that&nbsp;may&nbsp;occur&nbsp;during&nbsp;the&nbsp;process.</span></dd></dl>
+ <dl><dt><a name="-reorganize_dataset_for_keras"><strong>reorganize_dataset_for_keras</strong></a>(dataset_dir)</dt><dd><span class="code">Reorganizes&nbsp;a&nbsp;dataset&nbsp;into&nbsp;a&nbsp;structure&nbsp;compatible&nbsp;with&nbsp;Keras&nbsp;by&nbsp;sorting&nbsp;images&nbsp;into&nbsp;class-specific&nbsp;subdirectories.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_dir&nbsp;(str):&nbsp;The&nbsp;root&nbsp;directory&nbsp;of&nbsp;the&nbsp;dataset&nbsp;which&nbsp;contains&nbsp;the&nbsp;images&nbsp;and&nbsp;labels.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;loads&nbsp;class&nbsp;names&nbsp;from&nbsp;a&nbsp;YAML&nbsp;file,&nbsp;creates&nbsp;class-specific&nbsp;subdirectories&nbsp;under&nbsp;each&nbsp;image&nbsp;directory,<br>
+and&nbsp;moves&nbsp;images&nbsp;into&nbsp;these&nbsp;subdirectories&nbsp;based&nbsp;on&nbsp;their&nbsp;class&nbsp;ID&nbsp;obtained&nbsp;from&nbsp;the&nbsp;corresponding&nbsp;label&nbsp;files.<br>
+Designed&nbsp;to&nbsp;facilitate&nbsp;image&nbsp;classification&nbsp;tasks&nbsp;using&nbsp;Keras,&nbsp;this&nbsp;organization&nbsp;supports&nbsp;direct&nbsp;usage&nbsp;of&nbsp;Keras's<br>
+data&nbsp;loading&nbsp;utilities&nbsp;that&nbsp;expect&nbsp;data&nbsp;in&nbsp;such&nbsp;a&nbsp;structured&nbsp;format.</span></dd></dl>
+ <dl><dt><a name="-update_labels"><strong>update_labels</strong></a>(dataset_dir, labels_path, label_mapping, type)</dt><dd><span class="code">Updates&nbsp;the&nbsp;class&nbsp;indices&nbsp;in&nbsp;label&nbsp;files&nbsp;based&nbsp;on&nbsp;a&nbsp;provided&nbsp;mapping,&nbsp;for&nbsp;a&nbsp;specified&nbsp;dataset&nbsp;type.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_dir&nbsp;(str):&nbsp;Directory&nbsp;containing&nbsp;the&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;labels_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;directory&nbsp;containing&nbsp;the&nbsp;label&nbsp;files.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;label_mapping&nbsp;(dict):&nbsp;Dictionary&nbsp;mapping&nbsp;label&nbsp;filenames&nbsp;to&nbsp;new&nbsp;class&nbsp;indices.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;(str):&nbsp;The&nbsp;subset&nbsp;of&nbsp;the&nbsp;dataset&nbsp;being&nbsp;processed&nbsp;(e.g.,&nbsp;'train',&nbsp;'valid').<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;iterates&nbsp;through&nbsp;each&nbsp;label&nbsp;file&nbsp;specified&nbsp;in&nbsp;the&nbsp;label&nbsp;mapping.&nbsp;<br>
+If&nbsp;the&nbsp;label&nbsp;file&nbsp;exists,&nbsp;it&nbsp;reads&nbsp;and&nbsp;updates&nbsp;the&nbsp;class&nbsp;indices&nbsp;according&nbsp;to&nbsp;the&nbsp;mapping,<br>
+and&nbsp;then&nbsp;rewrites&nbsp;the&nbsp;modified&nbsp;labels&nbsp;back&nbsp;to&nbsp;the&nbsp;file.</span></dd></dl>
+</td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>max_workers</strong> = 12</td></tr></table>
+</body></html>

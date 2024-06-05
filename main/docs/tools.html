@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module tools</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">tools</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cgithub%5Cthird-year-project%5Cintruder-aircraft-detection%5Cmain%5Ctools.py">c:\github\third-year-project\intruder-aircraft-detection\main\tools.py</a></td></tr></table>
+    <p><span class="code">Tools&nbsp;module&nbsp;for&nbsp;various&nbsp;utility&nbsp;functions&nbsp;used&nbsp;throughout&nbsp;the&nbsp;project.<br>
+&nbsp;<br>
+This&nbsp;module&nbsp;provides&nbsp;a&nbsp;collection&nbsp;of&nbsp;utility&nbsp;functions&nbsp;that&nbsp;perform&nbsp;common&nbsp;tasks&nbsp;such&nbsp;as&nbsp;file&nbsp;handling,&nbsp;<br>
+label&nbsp;formatting,&nbsp;and&nbsp;metric&nbsp;calculations.</span></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="cv2.html">cv2</a><br>
+<a href="numpy.html">numpy</a><br>
+</td><td class="multicolumn"><a href="os.html">os</a><br>
+<a href="matplotlib.patches.html">matplotlib.patches</a><br>
+</td><td class="multicolumn"><a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+<a href="shutil.html">shutil</a><br>
+</td><td class="multicolumn"><a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-copy_file"><strong>copy_file</strong></a>(src, dst)</dt><dd><span class="code">Copies&nbsp;a&nbsp;file&nbsp;from&nbsp;a&nbsp;source&nbsp;path&nbsp;to&nbsp;a&nbsp;destination&nbsp;path.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;src&nbsp;(str):&nbsp;The&nbsp;source&nbsp;file&nbsp;path.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dst&nbsp;(str):&nbsp;The&nbsp;destination&nbsp;file&nbsp;path.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;copies&nbsp;the&nbsp;file&nbsp;located&nbsp;at&nbsp;the&nbsp;source&nbsp;path&nbsp;to&nbsp;the&nbsp;destination&nbsp;path,&nbsp;preserving&nbsp;metadata.</span></dd></dl>
+ <dl><dt><a name="-count_images"><strong>count_images</strong></a>(directory)</dt><dd><span class="code">Counts&nbsp;the&nbsp;total&nbsp;number&nbsp;of&nbsp;files&nbsp;in&nbsp;a&nbsp;directory,&nbsp;including&nbsp;all&nbsp;subdirectories.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;directory&nbsp;(str):&nbsp;The&nbsp;directory&nbsp;in&nbsp;which&nbsp;to&nbsp;count&nbsp;files.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int:&nbsp;The&nbsp;total&nbsp;number&nbsp;of&nbsp;files&nbsp;in&nbsp;the&nbsp;directory.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;traverses&nbsp;the&nbsp;specified&nbsp;directory&nbsp;and&nbsp;all&nbsp;its&nbsp;subdirectories,&nbsp;<br>
+counting&nbsp;the&nbsp;total&nbsp;number&nbsp;of&nbsp;files.</span></dd></dl>
+ <dl><dt><a name="-format_yolo_label"><strong>format_yolo_label</strong></a>(class_labels, augmented_bboxes)</dt><dd><span class="code">Formats&nbsp;class&nbsp;labels&nbsp;and&nbsp;bounding&nbsp;boxes&nbsp;into&nbsp;YOLO&nbsp;label&nbsp;format.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class_labels&nbsp;(list&nbsp;of&nbsp;int):&nbsp;List&nbsp;of&nbsp;class&nbsp;labels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;augmented_bboxes&nbsp;(list&nbsp;of&nbsp;list&nbsp;of&nbsp;float):&nbsp;List&nbsp;of&nbsp;augmented&nbsp;bounding&nbsp;boxes.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;A&nbsp;formatted&nbsp;string&nbsp;representing&nbsp;the&nbsp;YOLO&nbsp;labels.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;takes&nbsp;class&nbsp;labels&nbsp;and&nbsp;bounding&nbsp;boxes,&nbsp;formats&nbsp;them&nbsp;into&nbsp;YOLO&nbsp;label&nbsp;format,&nbsp;<br>
+and&nbsp;returns&nbsp;the&nbsp;resulting&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-generate_seed"><strong>generate_seed</strong></a>()</dt><dd><span class="code">Generates&nbsp;a&nbsp;seed&nbsp;value&nbsp;based&nbsp;on&nbsp;the&nbsp;current&nbsp;time&nbsp;in&nbsp;milliseconds.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int:&nbsp;A&nbsp;seed&nbsp;value&nbsp;derived&nbsp;from&nbsp;the&nbsp;current&nbsp;time.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;calculates&nbsp;the&nbsp;current&nbsp;time&nbsp;in&nbsp;milliseconds&nbsp;and&nbsp;returns&nbsp;it&nbsp;as&nbsp;a&nbsp;seed&nbsp;value,<br>
+modulo&nbsp;2^32&nbsp;to&nbsp;ensure&nbsp;it&nbsp;fits&nbsp;within&nbsp;typical&nbsp;integer&nbsp;ranges&nbsp;used&nbsp;for&nbsp;seeds.</span></dd></dl>
+ <dl><dt><a name="-load_yolo_labels"><strong>load_yolo_labels</strong></a>(label_path)</dt><dd><span class="code">Loads&nbsp;YOLO-formatted&nbsp;labels&nbsp;from&nbsp;a&nbsp;file.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;label_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;label&nbsp;file.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;A&nbsp;tuple&nbsp;containing:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;bboxes&nbsp;(list&nbsp;of&nbsp;list&nbsp;of&nbsp;float):&nbsp;List&nbsp;of&nbsp;bounding&nbsp;boxes&nbsp;with&nbsp;coordinates.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;class_labels&nbsp;(list&nbsp;of&nbsp;int):&nbsp;List&nbsp;of&nbsp;class&nbsp;labels.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;reads&nbsp;a&nbsp;YOLO-formatted&nbsp;label&nbsp;file,&nbsp;extracting&nbsp;bounding&nbsp;box&nbsp;coordinates&nbsp;and&nbsp;class&nbsp;labels,<br>
+and&nbsp;returns&nbsp;them&nbsp;as&nbsp;separate&nbsp;lists.</span></dd></dl>
+ <dl><dt><a name="-move_file"><strong>move_file</strong></a>(src, dst)</dt><dd><span class="code">Moves&nbsp;a&nbsp;file&nbsp;from&nbsp;a&nbsp;source&nbsp;path&nbsp;to&nbsp;a&nbsp;destination&nbsp;path.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;src&nbsp;(str):&nbsp;The&nbsp;source&nbsp;file&nbsp;path.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dst&nbsp;(str):&nbsp;The&nbsp;destination&nbsp;file&nbsp;path.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;moves&nbsp;the&nbsp;file&nbsp;located&nbsp;at&nbsp;the&nbsp;source&nbsp;path&nbsp;to&nbsp;the&nbsp;destination&nbsp;path.</span></dd></dl>
+ <dl><dt><a name="-pretty_print_dict"><strong>pretty_print_dict</strong></a>(d, indent=0)</dt><dd><span class="code">Formats&nbsp;a&nbsp;dictionary&nbsp;into&nbsp;a&nbsp;human-readable&nbsp;string&nbsp;with&nbsp;indentation.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;d&nbsp;(dict):&nbsp;The&nbsp;dictionary&nbsp;to&nbsp;be&nbsp;formatted.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;indent&nbsp;(int,&nbsp;optional):&nbsp;The&nbsp;number&nbsp;of&nbsp;spaces&nbsp;to&nbsp;use&nbsp;for&nbsp;indentation&nbsp;(default&nbsp;is&nbsp;0).<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;A&nbsp;formatted&nbsp;string&nbsp;representing&nbsp;the&nbsp;dictionary.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;takes&nbsp;a&nbsp;dictionary&nbsp;and&nbsp;formats&nbsp;it&nbsp;into&nbsp;a&nbsp;human-readable&nbsp;string&nbsp;with&nbsp;indentation.<br>
+It&nbsp;handles&nbsp;nested&nbsp;dictionaries&nbsp;and&nbsp;lists,&nbsp;formatting&nbsp;them&nbsp;appropriately.</span></dd></dl>
+ <dl><dt><a name="-remove_if_exists"><strong>remove_if_exists</strong></a>(path, progress=None)</dt><dd><span class="code">Removes&nbsp;a&nbsp;file&nbsp;or&nbsp;directory&nbsp;if&nbsp;it&nbsp;exists.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;file&nbsp;or&nbsp;directory&nbsp;to&nbsp;be&nbsp;removed.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;progress&nbsp;(tqdm,&nbsp;optional):&nbsp;A&nbsp;tqdm&nbsp;progress&nbsp;bar&nbsp;to&nbsp;update&nbsp;upon&nbsp;completion;&nbsp;default&nbsp;is&nbsp;None.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;checks&nbsp;if&nbsp;the&nbsp;specified&nbsp;path&nbsp;is&nbsp;a&nbsp;file&nbsp;or&nbsp;directory&nbsp;and&nbsp;removes&nbsp;it&nbsp;if&nbsp;it&nbsp;exists.<br>
+If&nbsp;a&nbsp;progress&nbsp;bar&nbsp;object&nbsp;is&nbsp;provided,&nbsp;it&nbsp;updates&nbsp;the&nbsp;progress&nbsp;bar&nbsp;after&nbsp;the&nbsp;removal.</span></dd></dl>
+ <dl><dt><a name="-round_to_3sf"><strong>round_to_3sf</strong></a>(value)</dt><dd><span class="code">Rounds&nbsp;a&nbsp;value&nbsp;or&nbsp;each&nbsp;element&nbsp;of&nbsp;a&nbsp;collection&nbsp;to&nbsp;three&nbsp;significant&nbsp;figures.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;(float,&nbsp;list,&nbsp;or&nbsp;np.ndarray):&nbsp;The&nbsp;value&nbsp;or&nbsp;collection&nbsp;of&nbsp;values&nbsp;to&nbsp;round.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;float,&nbsp;list,&nbsp;or&nbsp;np.ndarray:&nbsp;The&nbsp;rounded&nbsp;value&nbsp;or&nbsp;collection&nbsp;of&nbsp;rounded&nbsp;values.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;rounds&nbsp;a&nbsp;given&nbsp;float,&nbsp;or&nbsp;each&nbsp;element&nbsp;in&nbsp;a&nbsp;list&nbsp;or&nbsp;numpy&nbsp;array,&nbsp;to&nbsp;three&nbsp;significant&nbsp;figures.</span></dd></dl>
+ <dl><dt><a name="-save_image"><strong>save_image</strong></a>(path, image)</dt><dd><span class="code">Saves&nbsp;an&nbsp;image&nbsp;to&nbsp;the&nbsp;specified&nbsp;path,&nbsp;ensuring&nbsp;the&nbsp;directory&nbsp;exists.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;(str):&nbsp;Path&nbsp;where&nbsp;the&nbsp;image&nbsp;will&nbsp;be&nbsp;saved.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image&nbsp;(numpy.ndarray):&nbsp;Image&nbsp;data&nbsp;in&nbsp;RGB&nbsp;format&nbsp;to&nbsp;be&nbsp;saved.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;converts&nbsp;the&nbsp;image&nbsp;from&nbsp;RGB&nbsp;to&nbsp;BGR&nbsp;format&nbsp;and&nbsp;saves&nbsp;it&nbsp;to&nbsp;the&nbsp;specified&nbsp;path.<br>
+If&nbsp;the&nbsp;directory&nbsp;does&nbsp;not&nbsp;exist,&nbsp;it&nbsp;creates&nbsp;the&nbsp;necessary&nbsp;directories.</span></dd></dl>
+ <dl><dt><a name="-save_label"><strong>save_label</strong></a>(path, contents)</dt><dd><span class="code">Saves&nbsp;label&nbsp;contents&nbsp;to&nbsp;the&nbsp;specified&nbsp;path,&nbsp;ensuring&nbsp;the&nbsp;directory&nbsp;exists.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;(str):&nbsp;Path&nbsp;where&nbsp;the&nbsp;label&nbsp;file&nbsp;will&nbsp;be&nbsp;saved.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;contents&nbsp;(str):&nbsp;The&nbsp;content&nbsp;to&nbsp;be&nbsp;written&nbsp;to&nbsp;the&nbsp;label&nbsp;file.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;ensures&nbsp;the&nbsp;directory&nbsp;exists&nbsp;and&nbsp;then&nbsp;saves&nbsp;the&nbsp;provided&nbsp;content&nbsp;to&nbsp;the&nbsp;specified&nbsp;path.<br>
+If&nbsp;the&nbsp;directory&nbsp;does&nbsp;not&nbsp;exist,&nbsp;it&nbsp;creates&nbsp;the&nbsp;necessary&nbsp;directories.</span></dd></dl>
+</td></tr></table>
+</body></html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module evaluate</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">evaluate</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cgithub%5Cthird-year-project%5Cintruder-aircraft-detection%5Cmain%5Cevaluate.py">c:\github\third-year-project\intruder-aircraft-detection\main\evaluate.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="PIL.Image.html">PIL.Image</a><br>
+<a href="io.html">io</a><br>
+</td><td class="multicolumn"><a href="json.html">json</a><br>
+<a href="numpy.html">numpy</a><br>
+</td><td class="multicolumn"><a href="pandas.html">pandas</a><br>
+<a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+</td><td class="multicolumn"><a href="seaborn.html">seaborn</a><br>
+<a href="tools.html">tools</a><br>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="evaluate.html#Evaluate">Evaluate</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="Evaluate">class <strong>Evaluate</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#Evaluate">Evaluate</a>(train_hst,&nbsp;y_true,&nbsp;y_pred,&nbsp;class_names,&nbsp;aug=False,&nbsp;sf=3)<br>
+&nbsp;<br>
+Evaluation&nbsp;class&nbsp;for&nbsp;analyzing&nbsp;and&nbsp;reporting&nbsp;the&nbsp;performance&nbsp;of&nbsp;machine&nbsp;learning&nbsp;models.<br>
+&nbsp;<br>
+This&nbsp;class&nbsp;provides&nbsp;methods&nbsp;to&nbsp;calculate,&nbsp;log,&nbsp;and&nbsp;visualize&nbsp;various&nbsp;performance&nbsp;metrics&nbsp;for&nbsp;models,<br>
+including&nbsp;accuracy,&nbsp;precision,&nbsp;recall,&nbsp;F1&nbsp;score,&nbsp;loss,&nbsp;AUC,&nbsp;and&nbsp;confusion&nbsp;matrix.&nbsp;It&nbsp;is&nbsp;designed&nbsp;to&nbsp;work<br>
+with&nbsp;training&nbsp;history&nbsp;and&nbsp;prediction&nbsp;results,&nbsp;offering&nbsp;a&nbsp;comprehensive&nbsp;set&nbsp;of&nbsp;tools&nbsp;for&nbsp;model&nbsp;evaluation.<br>
+&nbsp;<br>
+Methods:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-__init__">__init__</a>(self,&nbsp;train_hst,&nbsp;y_true,&nbsp;y_pred,&nbsp;class_names,&nbsp;aug=False,&nbsp;sf=3):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initializes&nbsp;the&nbsp;Evaluation&nbsp;<a href="builtins.html#object">object</a>&nbsp;with&nbsp;training&nbsp;history,&nbsp;true&nbsp;and&nbsp;predicted&nbsp;labels,&nbsp;class&nbsp;names,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;augmentation&nbsp;type,&nbsp;and&nbsp;significant&nbsp;figures&nbsp;for&nbsp;rounding&nbsp;metrics.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-average_accuracy">average_accuracy</a>(self,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculates&nbsp;and&nbsp;returns&nbsp;the&nbsp;average&nbsp;training&nbsp;and&nbsp;validation&nbsp;accuracy.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-std_accuracy">std_accuracy</a>(self,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculates&nbsp;and&nbsp;returns&nbsp;the&nbsp;standard&nbsp;deviation&nbsp;of&nbsp;training&nbsp;and&nbsp;validation&nbsp;accuracy.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-best_accuracy">best_accuracy</a>(self,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculates&nbsp;and&nbsp;returns&nbsp;the&nbsp;highest&nbsp;training&nbsp;and&nbsp;validation&nbsp;accuracy.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-last_accuracy">last_accuracy</a>(self,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Retrieves&nbsp;and&nbsp;returns&nbsp;the&nbsp;accuracy&nbsp;from&nbsp;the&nbsp;final&nbsp;training&nbsp;epoch&nbsp;for&nbsp;both&nbsp;training&nbsp;and&nbsp;validation&nbsp;sets.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-overall_auc">overall_auc</a>(self,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculates&nbsp;and&nbsp;returns&nbsp;the&nbsp;overall&nbsp;AUC&nbsp;for&nbsp;the&nbsp;ROC&nbsp;curve.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-max_f1">max_f1</a>(self,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculates&nbsp;and&nbsp;returns&nbsp;the&nbsp;maximum&nbsp;F1&nbsp;score&nbsp;and&nbsp;the&nbsp;corresponding&nbsp;epoch.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-min_loss">min_loss</a>(self,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculates&nbsp;and&nbsp;returns&nbsp;the&nbsp;minimum&nbsp;validation&nbsp;loss&nbsp;and&nbsp;the&nbsp;corresponding&nbsp;epoch.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-diff_avg_loss_lastN">diff_avg_loss_lastN</a>(self,&nbsp;N,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculates&nbsp;and&nbsp;returns&nbsp;the&nbsp;difference&nbsp;between&nbsp;average&nbsp;validation&nbsp;and&nbsp;training&nbsp;loss&nbsp;over&nbsp;the&nbsp;last&nbsp;N&nbsp;epochs.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-std_loss_lastN">std_loss_lastN</a>(self,&nbsp;N,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculates&nbsp;and&nbsp;returns&nbsp;the&nbsp;standard&nbsp;deviation&nbsp;of&nbsp;the&nbsp;validation&nbsp;loss&nbsp;over&nbsp;the&nbsp;last&nbsp;N&nbsp;epochs.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-confusion_matrix_class_report">confusion_matrix_class_report</a>(self,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generates&nbsp;and&nbsp;returns&nbsp;a&nbsp;confusion&nbsp;matrix&nbsp;as&nbsp;a&nbsp;PIL&nbsp;image,&nbsp;a&nbsp;dictionary,&nbsp;and&nbsp;a&nbsp;classification&nbsp;report.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-class_auc">class_auc</a>(self,&nbsp;print_bool=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculates&nbsp;and&nbsp;returns&nbsp;the&nbsp;AUC&nbsp;for&nbsp;each&nbsp;class.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-log_metrics">log_metrics</a>(self,&nbsp;task,&nbsp;logger,&nbsp;N,&nbsp;augmentation_metadata,&nbsp;hyperparameters):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logs&nbsp;various&nbsp;performance&nbsp;metrics&nbsp;to&nbsp;a&nbsp;logging&nbsp;service&nbsp;and&nbsp;registers&nbsp;them&nbsp;as&nbsp;artifacts&nbsp;for&nbsp;tracking&nbsp;and&nbsp;analysis.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Evaluate-get_yolo_metrics_dict">get_yolo_metrics_dict</a>(metrics):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Converts&nbsp;YOLO&nbsp;evaluation&nbsp;metrics&nbsp;into&nbsp;a&nbsp;dictionary&nbsp;with&nbsp;specific&nbsp;key-value&nbsp;pairs.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="Evaluate-__init__"><strong>__init__</strong></a>(self, train_hst, y_true, y_pred, class_names, aug=False, sf=3)</dt><dd><span class="code">Initializes&nbsp;an&nbsp;Evaluation&nbsp;<a href="builtins.html#object">object</a>&nbsp;that&nbsp;captures&nbsp;and&nbsp;processes&nbsp;performance&nbsp;metrics&nbsp;for&nbsp;a&nbsp;trained&nbsp;model.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;train_hst&nbsp;(History):&nbsp;A&nbsp;History&nbsp;<a href="builtins.html#object">object</a>&nbsp;from&nbsp;Keras,&nbsp;containing&nbsp;training&nbsp;and&nbsp;validation&nbsp;metrics&nbsp;across&nbsp;epochs.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_true&nbsp;(list):&nbsp;True&nbsp;class&nbsp;labels&nbsp;for&nbsp;the&nbsp;test&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_pred&nbsp;(list):&nbsp;Predicted&nbsp;class&nbsp;labels&nbsp;from&nbsp;the&nbsp;model.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class_names&nbsp;(list&nbsp;of&nbsp;str):&nbsp;Names&nbsp;of&nbsp;the&nbsp;classes&nbsp;corresponding&nbsp;to&nbsp;indices&nbsp;in&nbsp;`y_true`&nbsp;and&nbsp;`y_pred`.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;aug&nbsp;(bool,&nbsp;optional):&nbsp;Indicates&nbsp;whether&nbsp;the&nbsp;evaluation&nbsp;is&nbsp;for&nbsp;an&nbsp;augmented&nbsp;dataset&nbsp;(default&nbsp;is&nbsp;False).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sf&nbsp;(int,&nbsp;optional):&nbsp;Number&nbsp;of&nbsp;significant&nbsp;figures&nbsp;to&nbsp;use&nbsp;when&nbsp;displaying&nbsp;metrics&nbsp;(default&nbsp;is&nbsp;3).<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;accuracy&nbsp;(float):&nbsp;Training&nbsp;accuracy.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;val_accuracy&nbsp;(float):&nbsp;Validation&nbsp;accuracy.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;precision&nbsp;(float):&nbsp;Training&nbsp;precision.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;val_precision&nbsp;(float):&nbsp;Validation&nbsp;precision.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;recall&nbsp;(float):&nbsp;Training&nbsp;recall.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;val_recall&nbsp;(float):&nbsp;Validation&nbsp;recall.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;loss&nbsp;(float):&nbsp;Training&nbsp;loss.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;val_loss&nbsp;(float):&nbsp;Validation&nbsp;loss.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_true&nbsp;(list):&nbsp;Actual&nbsp;labels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_pred&nbsp;(list):&nbsp;Predicted&nbsp;labels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class_names&nbsp;(list&nbsp;of&nbsp;str):&nbsp;Class&nbsp;names.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;(str):&nbsp;'augmented'&nbsp;or&nbsp;'pure',&nbsp;based&nbsp;on&nbsp;the&nbsp;dataset&nbsp;used.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sf&nbsp;(int):&nbsp;Significant&nbsp;figures&nbsp;for&nbsp;formatting.</span></dd></dl>
+
+<dl><dt><a name="Evaluate-average_accuracy"><strong>average_accuracy</strong></a>(self, print_bool=False)</dt><dd><span class="code">Calculates&nbsp;the&nbsp;average&nbsp;training&nbsp;and&nbsp;validation&nbsp;accuracy&nbsp;over&nbsp;all&nbsp;epochs.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;average&nbsp;accuracies;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;A&nbsp;tuple&nbsp;containing&nbsp;two&nbsp;floats:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;Average&nbsp;training&nbsp;accuracy.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;Average&nbsp;validation&nbsp;accuracy.</span></dd></dl>
+
+<dl><dt><a name="Evaluate-best_accuracy"><strong>best_accuracy</strong></a>(self, print_bool=False)</dt><dd><span class="code">Calculates&nbsp;the&nbsp;highest&nbsp;training&nbsp;and&nbsp;validation&nbsp;accuracy&nbsp;achieved&nbsp;over&nbsp;all&nbsp;epochs.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;best&nbsp;accuracies;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;A&nbsp;tuple&nbsp;containing&nbsp;two&nbsp;floats:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;Best&nbsp;training&nbsp;accuracy.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;Best&nbsp;validation&nbsp;accuracy.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;finds&nbsp;the&nbsp;maximum&nbsp;accuracy&nbsp;values&nbsp;from&nbsp;the&nbsp;training&nbsp;history,<br>
+optionally&nbsp;printing&nbsp;them&nbsp;based&nbsp;on&nbsp;the&nbsp;evaluation&nbsp;type&nbsp;(either&nbsp;'pure'&nbsp;or&nbsp;'augmented').</span></dd></dl>
+
+<dl><dt><a name="Evaluate-class_auc"><strong>class_auc</strong></a>(self, print_bool=False)</dt><dd><span class="code">Calculates&nbsp;the&nbsp;Area&nbsp;Under&nbsp;the&nbsp;Curve&nbsp;(AUC)&nbsp;for&nbsp;each&nbsp;class.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;AUC&nbsp;for&nbsp;each&nbsp;class;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict:&nbsp;A&nbsp;dictionary&nbsp;with&nbsp;class&nbsp;names&nbsp;as&nbsp;keys&nbsp;and&nbsp;their&nbsp;corresponding&nbsp;AUC&nbsp;values&nbsp;as&nbsp;values.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;computes&nbsp;the&nbsp;AUC&nbsp;score&nbsp;for&nbsp;each&nbsp;class&nbsp;using&nbsp;the&nbsp;true&nbsp;labels&nbsp;and&nbsp;predicted&nbsp;probabilities.<br>
+Optionally,&nbsp;it&nbsp;prints&nbsp;the&nbsp;AUC&nbsp;values&nbsp;for&nbsp;each&nbsp;class&nbsp;based&nbsp;on&nbsp;the&nbsp;evaluation&nbsp;type&nbsp;(either&nbsp;'pure'&nbsp;or&nbsp;'augmented').</span></dd></dl>
+
+<dl><dt><a name="Evaluate-confusion_matrix_class_report"><strong>confusion_matrix_class_report</strong></a>(self, print_bool=False)</dt><dd><span class="code">Generates&nbsp;a&nbsp;confusion&nbsp;matrix&nbsp;and&nbsp;classification&nbsp;report&nbsp;for&nbsp;the&nbsp;model's&nbsp;predictions.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;confusion&nbsp;matrix&nbsp;and&nbsp;classification&nbsp;report;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;A&nbsp;tuple&nbsp;containing:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;A&nbsp;PIL&nbsp;Image&nbsp;of&nbsp;the&nbsp;confusion&nbsp;matrix&nbsp;heatmap.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;A&nbsp;dictionary&nbsp;representation&nbsp;of&nbsp;the&nbsp;confusion&nbsp;matrix.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.&nbsp;A&nbsp;dictionary&nbsp;containing&nbsp;the&nbsp;classification&nbsp;report.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;calculates&nbsp;the&nbsp;confusion&nbsp;matrix&nbsp;and&nbsp;classification&nbsp;report&nbsp;using&nbsp;the&nbsp;true&nbsp;and&nbsp;predicted&nbsp;labels.<br>
+It&nbsp;also&nbsp;generates&nbsp;a&nbsp;heatmap&nbsp;of&nbsp;the&nbsp;confusion&nbsp;matrix,&nbsp;which&nbsp;is&nbsp;converted&nbsp;to&nbsp;a&nbsp;PIL&nbsp;Image.&nbsp;<br>
+Optionally,&nbsp;it&nbsp;can&nbsp;print&nbsp;the&nbsp;confusion&nbsp;matrix&nbsp;and&nbsp;classification&nbsp;report&nbsp;based&nbsp;on&nbsp;the&nbsp;evaluation&nbsp;type&nbsp;(either&nbsp;'pure'&nbsp;or&nbsp;'augmented').</span></dd></dl>
+
+<dl><dt><a name="Evaluate-diff_avg_loss_lastN"><strong>diff_avg_loss_lastN</strong></a>(self, N, print_bool=False)</dt><dd><span class="code">Calculates&nbsp;the&nbsp;difference&nbsp;between&nbsp;the&nbsp;average&nbsp;validation&nbsp;loss&nbsp;and&nbsp;the&nbsp;average&nbsp;training&nbsp;loss&nbsp;over&nbsp;the&nbsp;last&nbsp;N&nbsp;epochs.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;N&nbsp;(int):&nbsp;The&nbsp;number&nbsp;of&nbsp;final&nbsp;epochs&nbsp;to&nbsp;consider&nbsp;for&nbsp;the&nbsp;average&nbsp;loss&nbsp;calculation.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;difference&nbsp;in&nbsp;average&nbsp;loss;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;float:&nbsp;The&nbsp;difference&nbsp;between&nbsp;the&nbsp;average&nbsp;validation&nbsp;loss&nbsp;and&nbsp;the&nbsp;average&nbsp;training&nbsp;loss&nbsp;over&nbsp;the&nbsp;last&nbsp;N&nbsp;epochs.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;computes&nbsp;the&nbsp;average&nbsp;training&nbsp;and&nbsp;validation&nbsp;loss&nbsp;for&nbsp;the&nbsp;last&nbsp;N&nbsp;epochs,&nbsp;calculates&nbsp;the&nbsp;difference,<br>
+and&nbsp;optionally&nbsp;prints&nbsp;the&nbsp;result&nbsp;based&nbsp;on&nbsp;the&nbsp;evaluation&nbsp;type&nbsp;(either&nbsp;'pure'&nbsp;or&nbsp;'augmented').</span></dd></dl>
+
+<dl><dt><a name="Evaluate-get_yolo_metrics_dict"><strong>get_yolo_metrics_dict</strong></a>(metrics)</dt><dd><span class="code">Converts&nbsp;YOLO&nbsp;evaluation&nbsp;metrics&nbsp;into&nbsp;a&nbsp;dictionary&nbsp;with&nbsp;specific&nbsp;key-value&nbsp;pairs.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metrics&nbsp;(<a href="builtins.html#object">object</a>):&nbsp;An&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;YOLO&nbsp;evaluation&nbsp;metrics,&nbsp;typically&nbsp;including&nbsp;mAP&nbsp;and&nbsp;F1&nbsp;scores.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict:&nbsp;A&nbsp;dictionary&nbsp;containing&nbsp;rounded&nbsp;evaluation&nbsp;metrics,&nbsp;including:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'mAP_50-95':&nbsp;Mean&nbsp;Average&nbsp;Precision&nbsp;from&nbsp;IoU=0.50&nbsp;to&nbsp;0.95.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'mAP_50':&nbsp;Mean&nbsp;Average&nbsp;Precision&nbsp;at&nbsp;IoU=0.50.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'mAP_75':&nbsp;Mean&nbsp;Average&nbsp;Precision&nbsp;at&nbsp;IoU=0.75.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'mAP_per_class':&nbsp;List&nbsp;of&nbsp;mAP&nbsp;from&nbsp;IoU=0.50&nbsp;to&nbsp;0.95&nbsp;for&nbsp;each&nbsp;category.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'f1_per_class':&nbsp;List&nbsp;of&nbsp;F1&nbsp;scores&nbsp;for&nbsp;each&nbsp;category.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'f1_avg':&nbsp;Average&nbsp;F1&nbsp;score&nbsp;across&nbsp;all&nbsp;categories.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;calculates&nbsp;the&nbsp;average&nbsp;F1&nbsp;score&nbsp;and&nbsp;uses&nbsp;a&nbsp;utility&nbsp;function&nbsp;to&nbsp;round&nbsp;all&nbsp;metric&nbsp;values<br>
+to&nbsp;three&nbsp;significant&nbsp;figures&nbsp;before&nbsp;storing&nbsp;them&nbsp;in&nbsp;the&nbsp;dictionary.</span></dd></dl>
+
+<dl><dt><a name="Evaluate-last_accuracy"><strong>last_accuracy</strong></a>(self, print_bool=False)</dt><dd><span class="code">Retrieves&nbsp;the&nbsp;training&nbsp;and&nbsp;validation&nbsp;accuracy&nbsp;from&nbsp;the&nbsp;final&nbsp;epoch.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;final&nbsp;epoch&nbsp;accuracies;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;A&nbsp;tuple&nbsp;containing&nbsp;two&nbsp;floats:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;Training&nbsp;accuracy&nbsp;from&nbsp;the&nbsp;final&nbsp;epoch.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;Validation&nbsp;accuracy&nbsp;from&nbsp;the&nbsp;final&nbsp;epoch.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;accesses&nbsp;the&nbsp;last&nbsp;recorded&nbsp;accuracy&nbsp;values&nbsp;from&nbsp;the&nbsp;training&nbsp;history,<br>
+optionally&nbsp;printing&nbsp;them&nbsp;based&nbsp;on&nbsp;the&nbsp;evaluation&nbsp;type&nbsp;(either&nbsp;'pure'&nbsp;or&nbsp;'augmented').</span></dd></dl>
+
+<dl><dt><a name="Evaluate-log_metrics"><strong>log_metrics</strong></a>(self, task, logger, N, augmentation_metadata, hyperparameters)</dt><dd><span class="code">Logs&nbsp;various&nbsp;evaluation&nbsp;metrics&nbsp;to&nbsp;a&nbsp;logging&nbsp;service&nbsp;and&nbsp;registers&nbsp;them&nbsp;as&nbsp;artifacts&nbsp;for&nbsp;tracking&nbsp;and&nbsp;analysis.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;task&nbsp;(Task):&nbsp;The&nbsp;ClearML&nbsp;task&nbsp;<a href="builtins.html#object">object</a>&nbsp;for&nbsp;managing&nbsp;experiment&nbsp;logging.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;logger&nbsp;(Logger):&nbsp;The&nbsp;logger&nbsp;<a href="builtins.html#object">object</a>&nbsp;used&nbsp;to&nbsp;report&nbsp;scalar&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;N&nbsp;(int):&nbsp;Number&nbsp;of&nbsp;final&nbsp;epochs&nbsp;to&nbsp;consider&nbsp;for&nbsp;average&nbsp;loss&nbsp;calculations.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;augmentation_metadata&nbsp;(dict):&nbsp;Metadata&nbsp;about&nbsp;the&nbsp;augmentations&nbsp;applied&nbsp;to&nbsp;the&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;hyperparameters&nbsp;(dict):&nbsp;Hyperparameters&nbsp;used&nbsp;in&nbsp;the&nbsp;model&nbsp;training.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;calculates&nbsp;various&nbsp;performance&nbsp;metrics&nbsp;including&nbsp;accuracy,&nbsp;AUC,&nbsp;F1&nbsp;score,&nbsp;and&nbsp;loss&nbsp;statistics.<br>
+It&nbsp;logs&nbsp;key&nbsp;metrics&nbsp;as&nbsp;scalar&nbsp;values&nbsp;and&nbsp;registers&nbsp;comprehensive&nbsp;metrics&nbsp;and&nbsp;reports&nbsp;as&nbsp;artifacts<br>
+in&nbsp;ClearML&nbsp;for&nbsp;further&nbsp;analysis&nbsp;and&nbsp;tracking.</span></dd></dl>
+
+<dl><dt><a name="Evaluate-max_f1"><strong>max_f1</strong></a>(self, print_bool=False)</dt><dd><span class="code">Calculates&nbsp;the&nbsp;maximum&nbsp;F1&nbsp;score&nbsp;from&nbsp;the&nbsp;validation&nbsp;precision&nbsp;and&nbsp;recall&nbsp;values&nbsp;over&nbsp;all&nbsp;epochs.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;maximum&nbsp;F1&nbsp;score&nbsp;and&nbsp;its&nbsp;corresponding&nbsp;epoch;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;A&nbsp;tuple&nbsp;containing:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;The&nbsp;maximum&nbsp;F1&nbsp;score&nbsp;(float).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;The&nbsp;epoch&nbsp;at&nbsp;which&nbsp;the&nbsp;maximum&nbsp;F1&nbsp;score&nbsp;was&nbsp;achieved&nbsp;(int).<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;computes&nbsp;the&nbsp;F1&nbsp;score&nbsp;for&nbsp;each&nbsp;epoch&nbsp;using&nbsp;validation&nbsp;precision&nbsp;and&nbsp;recall,<br>
+identifies&nbsp;the&nbsp;highest&nbsp;F1&nbsp;score&nbsp;and&nbsp;the&nbsp;epoch&nbsp;at&nbsp;which&nbsp;it&nbsp;occurs,&nbsp;and&nbsp;optionally&nbsp;prints&nbsp;these&nbsp;values.</span></dd></dl>
+
+<dl><dt><a name="Evaluate-min_loss"><strong>min_loss</strong></a>(self, print_bool=False)</dt><dd><span class="code">Calculates&nbsp;the&nbsp;minimum&nbsp;validation&nbsp;loss&nbsp;over&nbsp;all&nbsp;epochs&nbsp;and&nbsp;identifies&nbsp;the&nbsp;corresponding&nbsp;epoch.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;minimum&nbsp;validation&nbsp;loss&nbsp;and&nbsp;its&nbsp;corresponding&nbsp;epoch;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;A&nbsp;tuple&nbsp;containing:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;The&nbsp;minimum&nbsp;validation&nbsp;loss&nbsp;(float).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;The&nbsp;epoch&nbsp;at&nbsp;which&nbsp;the&nbsp;minimum&nbsp;validation&nbsp;loss&nbsp;was&nbsp;achieved&nbsp;(int).<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;finds&nbsp;the&nbsp;lowest&nbsp;validation&nbsp;loss&nbsp;from&nbsp;the&nbsp;training&nbsp;history,&nbsp;identifies&nbsp;the&nbsp;epoch&nbsp;at&nbsp;which&nbsp;it&nbsp;occurred,<br>
+and&nbsp;optionally&nbsp;prints&nbsp;these&nbsp;values&nbsp;based&nbsp;on&nbsp;the&nbsp;evaluation&nbsp;type&nbsp;(either&nbsp;'pure'&nbsp;or&nbsp;'augmented').</span></dd></dl>
+
+<dl><dt><a name="Evaluate-overall_auc"><strong>overall_auc</strong></a>(self, print_bool=False)</dt><dd><span class="code">Calculates&nbsp;the&nbsp;overall&nbsp;Area&nbsp;Under&nbsp;the&nbsp;Curve&nbsp;(AUC)&nbsp;for&nbsp;the&nbsp;receiver&nbsp;operating&nbsp;characteristic&nbsp;(ROC).<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;overall&nbsp;AUC;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;float:&nbsp;The&nbsp;overall&nbsp;AUC&nbsp;value.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;computes&nbsp;the&nbsp;AUC&nbsp;score&nbsp;based&nbsp;on&nbsp;the&nbsp;true&nbsp;labels&nbsp;and&nbsp;predicted&nbsp;probabilities,<br>
+optionally&nbsp;printing&nbsp;the&nbsp;result&nbsp;based&nbsp;on&nbsp;the&nbsp;evaluation&nbsp;type&nbsp;(either&nbsp;'pure'&nbsp;or&nbsp;'augmented').</span></dd></dl>
+
+<dl><dt><a name="Evaluate-std_accuracy"><strong>std_accuracy</strong></a>(self, print_bool=False)</dt><dd><span class="code">Calculates&nbsp;the&nbsp;standard&nbsp;deviation&nbsp;of&nbsp;training&nbsp;and&nbsp;validation&nbsp;accuracy&nbsp;over&nbsp;all&nbsp;epochs.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;standard&nbsp;deviations;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;A&nbsp;tuple&nbsp;containing&nbsp;two&nbsp;floats:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;Standard&nbsp;deviation&nbsp;of&nbsp;training&nbsp;accuracy.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;Standard&nbsp;deviation&nbsp;of&nbsp;validation&nbsp;accuracy.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;computes&nbsp;the&nbsp;standard&nbsp;deviations&nbsp;to&nbsp;measure&nbsp;the&nbsp;variability&nbsp;of&nbsp;accuracy&nbsp;scores<br>
+throughout&nbsp;the&nbsp;training&nbsp;process,&nbsp;optionally&nbsp;printing&nbsp;them&nbsp;for&nbsp;'pure'&nbsp;or&nbsp;'augmented'&nbsp;evaluation&nbsp;types.</span></dd></dl>
+
+<dl><dt><a name="Evaluate-std_loss_lastN"><strong>std_loss_lastN</strong></a>(self, N, print_bool=False)</dt><dd><span class="code">Calculates&nbsp;the&nbsp;standard&nbsp;deviation&nbsp;of&nbsp;the&nbsp;validation&nbsp;loss&nbsp;over&nbsp;the&nbsp;last&nbsp;N&nbsp;epochs.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;N&nbsp;(int):&nbsp;The&nbsp;number&nbsp;of&nbsp;final&nbsp;epochs&nbsp;to&nbsp;consider&nbsp;for&nbsp;the&nbsp;standard&nbsp;deviation&nbsp;calculation.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_bool&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;prints&nbsp;the&nbsp;standard&nbsp;deviation&nbsp;of&nbsp;the&nbsp;validation&nbsp;loss;&nbsp;default&nbsp;is&nbsp;False.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;float:&nbsp;The&nbsp;standard&nbsp;deviation&nbsp;of&nbsp;the&nbsp;validation&nbsp;loss&nbsp;over&nbsp;the&nbsp;last&nbsp;N&nbsp;epochs.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;computes&nbsp;the&nbsp;standard&nbsp;deviation&nbsp;of&nbsp;the&nbsp;validation&nbsp;loss&nbsp;for&nbsp;the&nbsp;last&nbsp;N&nbsp;epochs&nbsp;and&nbsp;<br>
+optionally&nbsp;prints&nbsp;the&nbsp;result&nbsp;based&nbsp;on&nbsp;the&nbsp;evaluation&nbsp;type&nbsp;(either&nbsp;'pure'&nbsp;or&nbsp;'augmented').</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

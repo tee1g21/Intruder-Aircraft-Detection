@@ -6,7 +6,7 @@ histogram equalization, white balancing, sharpening, and zooming.
 Functions:
     flip(image_path, label_path, orientation, p=1.0): Applies a flip transformation.
     rotate(image_path, label_path, angle_limit, p=1.0): Applies a rotation to the image.
-    brightness_and_contracy(image_path, alpha=1.0, beta=0): Modifies brightness and contrast.
+    brightness_and_contrast(image_path, alpha=1.0, beta=0): Modifies brightness and contrast.
     gaussian_noise(image_path, var_limit=(10.0, 50.0)): Adds Gaussian noise to images.
     hist_eq(image_path, p=1.0): Applies histogram equalization for contrast improvement.
     white_balance(image_path): Adjusts image colors based on the Gray World assumption.

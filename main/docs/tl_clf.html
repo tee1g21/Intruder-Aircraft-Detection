@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module tl_clf</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">tl_clf</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cgithub%5Cthird-year-project%5Cintruder-aircraft-detection%5Cmain%5Ctl_clf.py">c:\github\third-year-project\intruder-aircraft-detection\main\tl_clf.py</a></td></tr></table>
+    <p><span class="code">Training&nbsp;and&nbsp;evaluation&nbsp;script&nbsp;for&nbsp;a&nbsp;custom&nbsp;image&nbsp;classification&nbsp;model.<br>
+&nbsp;<br>
+This&nbsp;module&nbsp;defines&nbsp;the&nbsp;main&nbsp;training&nbsp;pipeline&nbsp;for&nbsp;a&nbsp;custom&nbsp;image&nbsp;classifier&nbsp;using&nbsp;TensorFlow&nbsp;and&nbsp;ClearML.<br>
+It&nbsp;handles&nbsp;data&nbsp;loading,&nbsp;preprocessing,&nbsp;augmentation,&nbsp;model&nbsp;training,&nbsp;and&nbsp;evaluation,&nbsp;and&nbsp;logs&nbsp;metrics&nbsp;to&nbsp;ClearML.<br>
+&nbsp;<br>
+Functions:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-main">main</a>(RUN,&nbsp;augmentation_metadata,&nbsp;task_name,&nbsp;sub_project,&nbsp;epochs,&nbsp;train_size,&nbsp;w1,&nbsp;w2,&nbsp;new_image_count):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Main&nbsp;function&nbsp;to&nbsp;set&nbsp;up&nbsp;and&nbsp;run&nbsp;the&nbsp;training&nbsp;and&nbsp;evaluation&nbsp;pipeline&nbsp;for&nbsp;both&nbsp;pure&nbsp;and&nbsp;augmented&nbsp;datasets.<br>
+&nbsp;<br>
+Details:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;`main`&nbsp;function&nbsp;performs&nbsp;the&nbsp;following&nbsp;steps:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Generates&nbsp;a&nbsp;seed&nbsp;for&nbsp;reproducibility.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Loads&nbsp;the&nbsp;training&nbsp;and&nbsp;validation&nbsp;datasets&nbsp;and&nbsp;creates&nbsp;DataFrames.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Filters&nbsp;data&nbsp;based&nbsp;on&nbsp;specified&nbsp;conditions&nbsp;(e.g.,&nbsp;weather).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Splits&nbsp;the&nbsp;data&nbsp;into&nbsp;training&nbsp;and&nbsp;validation&nbsp;sets&nbsp;using&nbsp;stratified&nbsp;sampling.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Creates&nbsp;and&nbsp;augments&nbsp;the&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Preprocesses&nbsp;the&nbsp;dataset&nbsp;for&nbsp;classification.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Organizes&nbsp;the&nbsp;dataset&nbsp;into&nbsp;a&nbsp;structure&nbsp;compatible&nbsp;with&nbsp;Keras.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Loads&nbsp;the&nbsp;dataset&nbsp;using&nbsp;Keras'&nbsp;utility&nbsp;functions.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Defines&nbsp;a&nbsp;Convolutional&nbsp;Neural&nbsp;Network&nbsp;(CNN)&nbsp;model&nbsp;for&nbsp;image&nbsp;classification.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Trains&nbsp;the&nbsp;model&nbsp;on&nbsp;both&nbsp;the&nbsp;pure&nbsp;and&nbsp;augmented&nbsp;datasets.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Evaluates&nbsp;the&nbsp;model,&nbsp;logs&nbsp;the&nbsp;metrics,&nbsp;and&nbsp;uploads&nbsp;them&nbsp;to&nbsp;ClearML.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Uses&nbsp;TensorFlow's&nbsp;callback&nbsp;functions&nbsp;for&nbsp;real-time&nbsp;logging.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;RUN&nbsp;(int):&nbsp;The&nbsp;run&nbsp;number&nbsp;for&nbsp;this&nbsp;training&nbsp;session.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;augmentation_metadata&nbsp;(dict):&nbsp;Metadata&nbsp;specifying&nbsp;the&nbsp;augmentation&nbsp;methods&nbsp;to&nbsp;apply.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;task_name&nbsp;(str):&nbsp;Name&nbsp;of&nbsp;the&nbsp;task&nbsp;for&nbsp;logging.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sub_project&nbsp;(str):&nbsp;Sub-project&nbsp;name&nbsp;for&nbsp;organizing&nbsp;tasks.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;epochs&nbsp;(int):&nbsp;Number&nbsp;of&nbsp;epochs&nbsp;to&nbsp;train&nbsp;the&nbsp;model.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;train_size&nbsp;(int):&nbsp;Size&nbsp;of&nbsp;the&nbsp;training&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w1&nbsp;(str):&nbsp;First&nbsp;weather&nbsp;condition&nbsp;for&nbsp;filtering&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w2&nbsp;(str):&nbsp;Second&nbsp;weather&nbsp;condition&nbsp;for&nbsp;filtering&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;new_image_count&nbsp;(int):&nbsp;Number&nbsp;of&nbsp;new&nbsp;images&nbsp;to&nbsp;append&nbsp;to&nbsp;the&nbsp;training&nbsp;set.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</span></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="argparse.html">argparse</a><br>
+<a href="config.html">config</a><br>
+</td><td class="multicolumn"><a href="clearml.html">clearml</a><br>
+<a href="dataset.html">dataset</a><br>
+</td><td class="multicolumn"><a href="numpy.html">numpy</a><br>
+<a href="os.html">os</a><br>
+</td><td class="multicolumn"><a href="tensorflow.html">tensorflow</a><br>
+<a href="tools.html">tools</a><br>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-main"><strong>main</strong></a>(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size, w1, w2, new_image_count)</dt></dl>
+</td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>seed_const</strong> = 42</td></tr></table>
+</body></html>

@@ -5,6 +5,7 @@ This configuration file defines paths and project-specific settings used across 
 including the dataset and logging directories for YOLO and custom classifier implementations.
 
 Global Settings:
+- ROOT: The root directory of the project. Needed as relative paths must be absolute 
 - BASE_DATASET: The base directory where the AVOIDDS dataset is located.
 - PROJECT_NAME: The general name of the project for ClearML.
 
@@ -23,18 +24,19 @@ Custom classifier settings:
 """
 
 # Project variables
-BASE_DATASET = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets/AVOIDDS'
+ROOT = '..'
+BASE_DATASET = f'{ROOT}/datasets/AVOIDDS'
 PROJECT_NAME = 'Intruder-Aircraft-Detection'
 
 # YOLO specfic
-YOLO_DATASET_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets/YOLOv8'
-YOLO_PROJECT_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/logs/YOLOv8'
+YOLO_DATASET_DIR = f'{ROOT}/datasets/YOLOv8'
+YOLO_PROJECT_DIR = f'{ROOT}/logs/YOLOv8'
 YOLO_PROJECT_NAME = f'{PROJECT_NAME}/YOLOv8'
 YOLO_CLASS_NAMES = ['Cessna Skyhawk','Boeing 737-800', 'King Air C90'] 
 
 # Custom classifier specific
-CLF_DATASET_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/datasets/Custom'
-CLF_PROJECT_DIR = 'C:/github/Third-Year-Project/Intruder-Aircraft-Detection/logs/Custom'
+CLF_DATASET_DIR = f'{ROOT}/datasets/Custom'
+CLF_PROJECT_DIR = f'{ROOT}/logs/Custom'
 CLF_CLASS_NAMES = ['Cessna Skyhawk','Boeing 737-800', 'King Air C90'] 
 CLF_PROJECT_NAME = f'{PROJECT_NAME}/tl_clf'
 
