@@ -138,7 +138,7 @@ def main(RUN, augmentation_metadata, task_name, sub_project, epochs, train_size,
     ds.augment_dataset(dataset_dir, augmentation_metadata)
     
     # append new images to dataset train set (only need for final CLF tests)
-    ds.append_new_train_images(dataset_dir, new_image_count, filtered_train_df, seed_time, class_names)
+    #ds.append_new_train_images(dataset_dir, new_image_count, filtered_train_df, seed_time, class_names)
     
     # Pre-processing to AID classification (apply zoom factor to all images)
     ds.pre_process_dataset_for_classification(dataset_dir, zoom_factor)
