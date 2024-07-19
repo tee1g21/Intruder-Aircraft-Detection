@@ -1,8 +1,8 @@
 # Intruder-Aircraft-Detection
 
-The Importance of Data Augmentation for Image Classification and Intruder Aircraft DetectionIntruder Aircraft Detection
-Tom Evans
-June 7, 2024
+The Importance of Data Augmentation for Image Classification and Intruder Aircraft DetectionIntruder Aircraft Detection, 
+Tom Evans, 
+June 7, 2024. 
 
 1.1 Problem
 When identifying intruder aircraft from the perspective of an opposing aircraft,
